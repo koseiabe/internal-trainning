@@ -1,0 +1,5 @@
+* memo.adocをgithubにpushすること→このあとすぐに
+* 研修で学習したvimの内容を思い出すため復習する。
+* vimの学習していない項目をudemyで行う。
+* lineworksに逐一作業内容を報告
+* 日報をdayreport内にファイル名"20260529_report.adoc"という形式で毎日行っていく。
