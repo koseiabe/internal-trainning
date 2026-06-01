@@ -1,8 +1,7 @@
 :toc: left
 :toc-title: [目次]
-:toclevels: 3
+:toclevels: 1
 :sectNums:
-:sectNumLevels: 3
 
 = 2026/06/01日報
 
