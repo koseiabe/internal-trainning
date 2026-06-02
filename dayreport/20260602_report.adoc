@@ -1,4 +1,4 @@
-:top: left
+:toc: left
 :toc-title: [目次]
 :sectNums:
 
@@ -11,10 +11,8 @@
 |===
 |演習１シェルスクリプト記述
 |#!/bin/bash
-|
 |#シェル変数定義
 |currentdate=`date '+%Y%m%d'`
-|
 |#テキストファイルを作成
 |touch ${FILE_NAME}_${currentdate}.txt
 |===
