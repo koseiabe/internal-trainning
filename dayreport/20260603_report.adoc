@@ -1,0 +1,62 @@
+:toc: left
+:toc-title: [目次]
+:sectnum:
+
+= 2026/06/03日報
+
+
+== セクション１０：標準入力、引数、if文
+
+
+=== if形式１: if test <条件文>; then
+
+|===
+|文字列の比較
+|`==`: 等しいか    ("$\{OS}" == "Linux")
+|`!=`:等しくないか ("$\{OS}" != "Linux")
+|===
+name="$\{1}" +
+age="$\{2}" +
+`if test "${name}" == "Taro"; then` +
+ echo "あなたの名前は太郎です" +
+`elif test "${name}" != "Hanako"; then` +
+ echo "あなたの名前花子ではないです" +
+`else` +
+ echo "あなたの名前は花子です" +
+`fi` +
+
+|===
+|数値の比較
+|`-eq`:等しいか(equal)
+|`-ne`:等しくないか(not equal)
+|`-it`:より小さいか(less than)
+|`-le`:以下か(less equal)
+|`-gt`:より大きいか(greater than)
+|`-ge`:以上か(greater equal)
+|===
+`if test "$\{age}" -ge 60; then` #60以上 +
+ echo "60以上" +
+`elif test "$\{age}" -gt 20; then` #20より大きい +
+ echo "21\~59" +
+`else` +
+ echo "20以下" +
+`fi` +
+
+
+=== if形式2: if [<条件文>]; then
+* `if [ "${name}" == "Taro" ]; then`
+* `elif [ "${name}" != "Hanako" ]; then`
+
+
+=== if形式3: if [[<条件文>]]; then
+* `if [[ "${name}" == "Taro" ]]; then`
+* `elif [[ "${name}" != "Hanako" ]]; then`
+
+
+=== if形式４(数値比較):　if\((条件式))
+* `if (( "${age}" >= 60 )); then` #60以上か
+* `elif (( "${age}" > 20 )); then` #20より大きいか +
+※\((条件文))の形式の際は、数値比較時に"<","<="を使っても正しく数値が認識される
+
+
+
