@@ -79,15 +79,15 @@ age="$\{2}" +
 * `if [ 条件式1 #-a# 条件式2 ]; then`
 
 |===
-year=$(date "+%Y" )
-#2026
-year=2000
-#4で割り切れて、100で割り切れない
-if (( "${year}" % 4 == 0 && "${year}" % 100 != 0 )); then
-echo "うるう年です"
-else
-echo "うるう年ではないです"
-fi
+year=$(date "+%Y") +
+#2026 +
+year=2000 +
+#4で割り切れて、100で割り切れない +
+if (( "${year}" % 4 == 0 && "${year}" % 100 != 0 )); then +
+echo "うるう年です" +
+else +
+echo "うるう年ではないです" +
+fi 
 |===
 
 === 特殊なif文
@@ -113,7 +113,7 @@ fi
 
 |===
 |nameにいれたnamesの要素を一つ一つをループ処理
-names="Taro Jiro Saburo" ←変数namesに値を設定 +
+|names="Taro Jiro Saburo" ←変数namesに値を設定 +
 #for name in $\{names}# ←#※$\{names}の前後に""を付けない# +
 do +
 		echo "name: $\{name}" +
@@ -124,7 +124,7 @@ done
 
 |===
 |変数numberに０～５までの値を入れ2つ飛ばしでループ
-#for number in ${0..5..2}# +
+|#for number in ${0..5..2}# +
 do +
 		echo "$\{number}" +
 done
@@ -135,7 +135,7 @@ done
 === 辞書利用:配列要素に対応する値を入れることができる
 |===
 |配列要素と各要素に対応する値を出力
-declare -A salaries ←配列の宣言 +
+|declare -A salaries ←配列の宣言 +
 
 \#要素に対応する値を入れる +
 salaries['Taro']=1000000 +
@@ -157,7 +157,7 @@ done
 
 |===
 |演習
-#0 ~ 100 +
+|#0 ~ 100 +
 #15で割り切れたらFB +
 #15で割り切れないが、３で割り切れるF +
 #15で割り切れないが５で割り切れるB +
@@ -183,7 +183,7 @@ done +
 
 |===
 |変数が１０以上になるまでループ
-counter=1 +
+|counter=1 +
 #while (( "${counter}" <= 10 ))# +
 do +
    echo "counter: ${counter}" +
