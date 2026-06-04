@@ -9,7 +9,8 @@
 == セクション１０：標準入力、引数、if文
 
 
-=== if形式１: #if test <条件文>; then#
+=== if 文形式１
+#if test <条件文>; then#
 
 |===
 |文字列の比較
@@ -29,44 +30,50 @@
 * 文字列・数値比較スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_03_if.sh
 
 
-=== if形式2: #if [<条件文>]; then#
+=== if 形式2
+#if [<条件文>]; then# +
 * `if [ "${name}" == "Taro" ]; then`
 * `elif [ "${name}" != "Hanako" ]; then`
 
 
-=== if形式3: #if [[<条件文>]]; then#
+=== if 形式3
+#if [[<条件文>]]; then# +
 * `if [[ "${name}" == "Taro" ]]; then`
 * `elif [[ "${name}" != "Hanako" ]]; then`
 
 
-=== if形式４(数値比較):　#if\((条件式)); then#
+=== if 形式４(数値比較)
+#if\((条件式)); then# +
 * `if (( "${age}" >= 60 )); then` #60以上か
 * `elif (( "${age}" > 20 )); then` #20より大きいか +
 ※\((条件文))の形式の際は、数値比較時に"<","<="を使っても正しく数値が認識される
 * 数値比較スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_05_if.sh
 
 
-=== if文否定：条件式を満たさない場合に実行
+=== if 文否定
+#条件式を満たさない場合に実行# +
 * `if [[ #!# 条件式 ]]; then`
 * `if #!# \(( 条件式　)); then`
 * NOTスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_07_if_not.sh
 
 
-=== if文「OR」:複数条件のどれかを満たす場合に実行
+=== if 文「OR」
+#複数条件のどれかを満たす場合に実行# +
 * `if [[ 条件式1 #||# 条件式2 ]]; then`
 * `if (( 条件式1 #||# 条件式2 )); then`
 * `if [ 条件式1 #-o# 条件式2 ]; then`
 * ORスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_08_if_or.sh
 
 
-=== if文「AND」:複数条件をすべてを満たす場合に実行
+=== if 文「AND」
+#複数条件をすべてを満たす場合に実行# +
 * `if [[ 条件式1 #&&# 条件式2 ]]; then`
 * `if (( 条件式1 #&&# 条件式2 )); then`
 * `if [ 条件式1 #-a# 条件式2 ]; then`
 * ANDスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_09_if_and.sh
 
 
-=== 特殊なif文
+=== 特殊なif 文
 * `if [[ #-z# "${my_var}" ]]; then`:変数が設定されていない場合の処理
 * `if [[ #-n# "${my_var}" ]]; then`:変数が設定されている場合の処理
 * `if [[ "${name}" == #*Ta*# ]]; then`:変数にTaが含まれているか
@@ -85,7 +92,8 @@
 ※seqコマンドでも実行することができる。${ seq 0 2 5}で２つ飛ばし
 
 
-=== 辞書利用:配列要素に対応する値を入れることができる
+=== 辞書利用
+#配列要素に対応する値を入れることができる# +
 * 辞書検索スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_02_dictionary.sh
 
 
@@ -97,12 +105,14 @@
 * 演習スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_05_example.sh
 
 
-=== while:指定条件を満たしている間はループする
+=== while
+#指定条件を満たしている間はループする# +
 * whileループは条件を満たしている間無限ループしてしまうため、終了どころを必ず記述する 
 * whileスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_06_while.sh
 
 
-=== until:指定条件を満たすまでループする
+=== until
+#指定条件を満たすまでループする# +
 * whileループの逆 
 * untilスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_07_until.sh
 * 応用演習： https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_08_example.sh
