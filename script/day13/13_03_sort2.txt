@@ -1,0 +1,4 @@
+1, apple, 300円
+2, banana, 400円
+3, pine, 500円
+4, grame, 200円
