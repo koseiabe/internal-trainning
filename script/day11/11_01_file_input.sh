@@ -4,5 +4,5 @@ echo "Hello"
 
 echo "Goodbye"
 
-echo "こんにちは" > file.txt
+echo "こんにちは" >> file.txt
 

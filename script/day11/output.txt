@@ -1,0 +1,5 @@
+標準出力
+./11_02_error_output.sh: line 5: ech: command not found
+date: unknown option -- y
+Try 'date --help' for more information.
+./11_02_error_output.sh: line 9: ((: -eq 10 : syntax error in expression (error token is "10 ")

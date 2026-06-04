@@ -1,0 +1,106 @@
+:toc: left
+:toc-title: [目次]
+:toclevels: 3
+:sectnums:
+
+= 2026/06/04日報
+
+== セクション１２:標準出力,エラー出力,ファイル入出力
+
+
+=== 標準出力:「１」
+* `#>#`:上書き
+* `>>`:追記
+* 標準出力スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day11/11_01_file_input.sh
+
+
+=== エラー出力:「２」
+* `#2>#`:標準エラー出力をファイルに上書き
+* `2>>`:標準エラー出力をファイルに追記
+* `./11_02_error_output.sh 1> 1.txt 2> 2.txt`:標準出力を"1.txt"、標準エラー出力を"2.txt"に送ることができる
+* 標準エラー出力スクリプト:https://github.com/koseiabe/internal-trainning/blob/main/script/day11/11_02_error_output.sh
+
+
+=== 出力の特殊な書き方
+* `#&>#`:標準とエラー出力を同じファイルに出力する
+* `2>&1`:標準エラーを標準出力と一緒の設定にする +
+※例:./11_02_error_output.sh > output.txt 2>&1
+* `#&> /dev/null#`:標準出力もエラー出力も画面上にもファイルにも出力しない
+
+
+=== ファイル入力
+* `file=$(cat file.txt)`:catの実行結果を変数に格納
+* `cat <ファイル名> | while`:ファイルの中身をループさせる +
+※while内の処理はサブシェルと呼び、while外の変数を変更しても変更は反映されない
+* whileでファイル読みスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day11/11_03_file_input.sh
+* 演習(ループを使ったファイル内計算)スクリプト:https://github.com/koseiabe/internal-trainning/blob/main/script/day11/11_04_exam.sh
+
+
+
+== セクション１３:相対パス,絶対パス,終了ステータス,&& ||での実行
+
+
+=== realpath:指定したファイル・ディレクトリの絶対パスを表示
+* `#realpath <ファイル名>#` +
+※例：#full_path=$(realpath ${0})#
+* realpath活用スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day12/project/bin/program.sh
+
+=== dirname:ファイル・ディレクトリの絶対パス名から親ディレクトリ名を取得
+* `#dirname <絶対パス名>#`
+※例：#bin_path=$(dirname "${full_path"})#
+* dirname活用スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day12/project/bin/program.sh
+
+=== リンクを用いたファイル実行
+* `in -s <リンク作成したいファイルの絶対パス> <環境変数のディレクトリ>`:環境変数設定されているディレクトリ内にリンクを作成することで、リンク名だけで実行できるようになる
+
+
+=== 終了ステータス:コマンドが成功か失敗かを表すコード
+* ステータスが"0"なら成功、"0"以外なら失敗
+* `echo $?`:直前のコマンド結果の終了ステータスを確認する
+
+.終了ステータス,意味・発生する主な原因,具体例
+|===
+|0
+|成功（正常終了）
+|コマンドがエラーなしで完了した状態。
+
+|1
+|一般的なエラー
+|0除算（割り算の分母が0）や、一般的なコマンドの失敗など。
+
+|2
+|シェルの誤用 / 構文エラー
+|先ほど発生していた while の done 閉じ忘れや、権限エラーなど。
+
+|126
+|コマンドが実行不能
+|ファイルはあるが、実行権限（chmod +x）が付いていないとき。
+
+|127
+|コマンドが見つからない
+|タイポ（打ち間違い）や、$PATH の中にコマンドが存在しないとき。
+
+|128
+|exitへの不正な引数
+|exit 3.14 のように整数以外の値を指定して終了しようとした。
+
+|128 + n
+|シグナル n による強制終了
+|例：130（128 + 2）は、実行中に Ctrl + C で強制終了したサイン。
+
+|255
+|終了ステータスの範囲外
+|終了ステータスは 0〜255 の範囲しか使えないため、枠を超えた時。
+|===
+
+* 終了ステータス応用スクリプト:  https://github.com/koseiabe/internal-trainning/script/day12/12_01_exit.sh
+* 終了ステータス応用スクリプト:  https://github.com/koseiabe/internal-trainning/script/day12/12_01_external.sh
+
+
+=== &&,||
+* `#<コマンド> && <コマンド>#`:前のコマンドが#成功#したら後のコマンドを実行する
+* `#<コマンド> || <コマンド>#`:前のコマンドが#失敗#したら後のコマンドを実行する
+* `#<A> && <B> || <C>#`:コマンドAが成功したらBが実行され、A,Bどちらか失敗したらCが実行される +
+※"||"の認識に注意
+
+
