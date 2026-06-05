@@ -160,7 +160,7 @@ join -t "," -1 2 -2 1 13_05_join2.txt 13_05_join3.txt +
 
 
 === 演習
-* `#\#!/bin/bash -x#`:ファイル行頭に付けることでシェルスクリプトの実行状況を確認できる
+* `##!/bin/bash -x#`:ファイル行頭に付けることでシェルスクリプトの実行状況を確認できる
 
 * 演習1-1スクリプト: https://github.com/koseiabe/internal-trainning/tree/main/script/day14/14_01_01_summary.sh
 * 演習1-2スクリプト: https://github.com/koseiabe/internal-trainning/tree/main/script/day14/14_01_02_summary.sh
