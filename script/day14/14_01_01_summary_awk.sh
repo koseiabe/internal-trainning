@@ -32,9 +32,9 @@ BEGIN {
 
     # 区分（費用 or 売上）に応じて集計
     if (type == "費用") {
-        total_cost += price
-        daily_costs[day] += price
-        product_costs[product] += price
+        total_cost += price             #合計に加算
+        daily_costs[day] += price				#日付ごとに加算
+        product_costs[product] += price #品目ごとに加算
     } else if (type == "売上") {
         total_earning += price
         daily_earnings[day] += price
@@ -42,7 +42,7 @@ BEGIN {
     }
 }
 END {
-    # 1. 総合計の出力
+	# 1. 総合計の出力（表示）
     print "合計:"
     print "費用: " total_cost
     print "売上: " total_earning
@@ -67,5 +67,5 @@ END {
     }
     close("sort") # 品目の出力をここで確定させる
 
-}' "${input_file}" > "${output_file}"
+}' "${input_file}" >> "${output_file}"
 
