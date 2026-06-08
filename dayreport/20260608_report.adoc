@@ -14,6 +14,97 @@
 
 == セクション１６：プロセス、ジョブ、case、select
 
+=== プロセス
+#OS上で実行されているプログラム# +
+
+* ゾンビプロセス：停止しているがメモリを開放していない、無駄にリソースを使ってしまうためkillコマンドで削除する。
+* デーモン：外部からのリクエストを契機に処理される(sshd,named,httpd等)
+
+
+=== ps コマンド
+#プロセス一覧表示# +
+
+* `-e`:稼働中のプロセス一覧
+* `-f`:詳細に表示
+* `aux`:メモリやCPUなどの使用状況をプロセスごとに表示
+* `-u <ユーザー名>`:指定したユーザのプロセス一覧
+ +
+* #`&`:コマンドの末尾に付けることでバックグラウンドで実行される#
+
+
+=== top コマンド
+#実行中のプリセス状態をリアルタイムで表示# +
+
+* `-d`:更新間隔指定 +
+※Windowsのタスクマネージャーと同じ
+
+=== ★ kill コマンド
+#実行中プロセスを停止,再起動,一時停止する# +
+
+* `-1 <プロセスID>`:再起動
+* `-9 <プロセスID>`:強制終了
+* `-15 <プロセスID>`:終了
+* `-18 <プロセスID>`:再開
+* `-19 <プロセスID>`:一時停止
+
+
+=== ★ ジョブ
+#シェルから見たプログラム単位# +
+※プロセスはOSから見たプログラム単位 +
+
+* `jobs コマンド`:実行中のジョブ一覧表示
+* `kill %<ジョブ番号>`:ジョブの削除
+* `fg %<ジョブ番号>`:フォアグラウンドでジョブを実行
+* `bg %<ジョブ番号>`:バックグラウンドでジョブを実行
+* `ctrl+z`:実行中のジョブを停止
+
+
+=== case 文
+#変数の値に応じて処理が変わる構文# +
+
+* `case "${1}" in`
+* `*)`:この場合は記述パターン以外のすべてを指す
+* case スクリプト: https://github.com/koseiabe/internal-trainning/tree/main/script/day15/15_03_case.sh
+
+
+=== select 文
+#複数の選択肢からどれかを選択する構文# +
+
+* `select <変数名> in <スペース区切りの文字列>`
+* `${REPLY}`:何番目を選んだか表示できる
+* select スクリプト:  https://github.com/koseiabe/internal-trainning/tree/main/script/day15/15_04_select.sh
+
+
+=== getopts コマンド
+#指定した形式の引数を取得するコマンド# +
+
+* 引数の順番にとらわれない、指定した引数に対して判断されることが利点
+* `while getopts "u:a:f:" opt`:このようにwhileで用いる
+* `${OPTARG}`:getoptsが自動的に用意してくれる特殊変数
+* getopts スクリプト:  https://github.com/koseiabe/internal-trainning/tree/main/script/day15/15_05_getopts.sh
+
+
+
+== セクション17:関数
+
+=== ★ 関数定義
+#コードをまとめる役割# +
+
+* `#function <関数名>(){}`:関数作成(わかりやすいためこっち推奨)#
+* `<関数名>(){}`:関数作成 +
+※展開するときは${}などは何もつけない +
+※関数の定義には小文字と"_"だけ
+* 関数と関数の間には基本何も記述しない +
+※環境変数やset文に関して関数の上部に記載してもよい
+* 関数定義スクリプト:  https://github.com/koseiabe/internal-trainning/tree/main/script/day16/16_01_function.sh
+
+
+=== ★ 関数（引数、返り値）
+* 関数で引数を用いる場合、${1},${2}のように用いるのが良い
+* `return` を用いることで関数実行後の返り値を指定でき、"$?"で返り値を取得
+* 関数（引数）スクリプト:  https://github.com/koseiabe/internal-trainning/tree/main/script/day16/16_02_aguments.sh
+* 関数（関数）スクリプト:  https://github.com/koseiabe/internal-trainning/tree/main/script/day16/16_02_return.sh
+
 
 
 
