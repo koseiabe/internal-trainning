@@ -80,17 +80,17 @@
 
 |===
 |設定内容一覧例
-|[Unit]
-Description=My Custom Python App (自作アプリの概要)
-After=network.target            # ネットワークが繋がってから起動
+|[Unit] +
+Description=My Custom Python App (自作アプリの概要) +
+After=network.target            # ネットワークが繋がってから起動 +
  +
-\[Service]
-Type=simple
-User=myuser                    # セキュリティのため一般ユーザーで実行
-ExecStart=/usr/bin/python3 /opt/myapp/app.py  # 動かしたいコマンド
-Restart=always                 # 落ちたら自動再起動！
+\[Service] +
+Type=simple +
+User=myuser                    # セキュリティのため一般ユーザーで実行 +
+ExecStart=/usr/bin/python3 /opt/myapp/app.py  # 動かしたいコマンド +
+Restart=always                 # 落ちたら自動再起動！ +
  +
-\[Install]
+\[Install] +
 WantedBy=multi-user.target     # 通常のOS起動時に自動起動させるための設定
 |===
 
@@ -175,6 +175,7 @@ WantedBy=multi-user.target     # 通常のOS起動時に自動起動させるた
 * 容量が大きいファイルのみ圧縮script: https://github.com/koseiabe/internal-trainning/tree/main/script/day20/compress_tar_xz.sh
 
 |===
+* wc -l （行数カウント） +
 * cut -d （区切り文字指定） +
 * cut -f （指定列抽出） +
 * sed -e "s/ /,/g" （置換） +
