@@ -1,0 +1,9 @@
+:toc: left
+:toc-title: [目次]
+:toclevels: 3
+:sectnums:
+
+= 2026/06/10 日報
+
+
+

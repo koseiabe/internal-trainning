@@ -183,6 +183,10 @@ WantedBy=multi-user.target     # 通常のOS起動時に自動起動させるた
 |===
 
 
+== セクション２２
+* `$$`:プロセスIDを取得する特殊変数
+* trapと関数を使った応用演習script: https://github.com/koseiabe/internal-trainning/tree/main/script/day21/calculate_primenumber.sh
+
 
 
 
