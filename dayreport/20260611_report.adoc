@@ -8,3 +8,96 @@
 == セクション４：ハンズオン実践
 * `sudo apt update`:パッケージの更新確認
 * `git clone <URL>`:gitプロジェクトを別サーバーに移すことができる
+* `ansible <ホスト名> -m  <モジュール> -i  <インベントリファイル>`:ansibleで指定のターゲットに対しインベントリファイルを元にモジュール実行できる
+* `/etc/ansible`:ansibleの設定ファイルが格納されている（基本的にansibleインストール時に自動作成される）
+* `ansible-config dump`:ansibleのすべての設定値を出力する +
+※このコマンドを使えば、ansibleの設定ファイルがなくても現在の設定値を確認できる
+
+=== ハンズオン１.2：nginxのインストール起動
+* `become: true`:playbookに記述すること、ファイルを実行する際に管理者権限で実行するように指示をする
+* `Ansible Builtin`:ansibleのサイトにて、ansibleの基礎的なモジュール一覧が参照できる
+* `amazon-linux-extras`:追加パッケージ管理ツール（install等）
+* `ansible-playbook <playbookファイル> -v`:playbook実行＆処理の詳細表示 +
+※/etc/ansibleの中のhostsファイルからターゲット情報を取得
+* `ansible-playbook -i <インベントリファイル> <playbookファイル> -v`:指定のインベントリファイルからターゲット情報を取得してplaybookを実行する
+* `chenged_when: false`:playbookのタスクに記述することで、コマンドは実行されたがターゲットの状況には変化なしの場合に"changed"に出力しない仕様にする
+
+
+|===
+\# install Nginx using Ansible +
+\# Start and Enable Nginx +
+\# Check the status of Nginx +
+\# Collect host information +
+- name: Setup nginx server on myserver list (host group) +
+  hosts: +
+    - devservers +
+    - testservers +
+  become: true +
+  tasks: +
+  \# 1. インストール（Ubuntu用にaptモジュールへ変更） +
+    - name: Install the latest version of nginx +
+      ansible.builtin.apt: +
+        name: nginx +
+ +
+  \# 2. 起動と自動起動有効化（1つのタスクにまとめられます） +
+    - name: Start and Enable nginx service +
+      ansible.builtin.service: +
+        name: nginx +
+        state: started +
+        enabled: true +
+ +
+   \# 3. バージョン取得（registerとchanged_whenを追加） +
+    - name: Get nginx Installed version +
+      ansible.builtin.command: nginx -v +
+      changed_when: false +
+ +
+   \# 4. nginxのステータスを取得（registerとchanged_whenを追加）  +
+    - name: Get status of nginx service +
+      ansible.builtin.command: systemctl status nginx +
+      changed_when: false +
+|===
+
+
+=== ハンズオン３：ファイル作成
+* adminノード＝ansibleのmaster
+* `ssh <ユーザー名＠IPアドレス>`:ssh接続
+
+|===
+   \# 5. ターゲットのhomeディレクトリ直下にディレクトリを作成 +
+    - name: Create directory +
+      file: +
+        path: /home/ubuntu/filemodule +
+        state: directory +
+ +
+   \# 6. ファイルの作成 +
+    - name: Create file +
+      file: +
+        path: /home/ubuntu/filemodule/filemodule.txt +
+        state: touch +
+|===
+
+
+=== ハンズオン４：ファイル自体コピー
+* `src: ＜ファイル＞`:コーピー元ファイル
+* `dest: ＜パス＞`:コピー先パス
+* httpでローカルからターゲットマシンに接続するためにセキュリティグループの変更
+
+|===
+    \#マスターからターゲットにコピー +
+    - name: Ansible copy file to remote server +
+      copy: +
+        src: "/home/ec2-user/index.html" +
+        dest: "/usr/share/nginx/html/" +
+|===
+
+* `sshポートフォワード`:SSHで暗号化されたトンネルを利用して別サーバやDBにアクセスできる
+* `ssh -L <自分の任意のポート番号：接続先IPアドレス：接続先ポート番号> <接続先ユーザー名＠IPアドレス>`:sshポートフォワードのコマンド例 +
+※ "-L"は自分のPCを指す(local)
+
+
+=== ハンズオン５ファイルの中身を指定したコピー
+* 
+
+
+
+
