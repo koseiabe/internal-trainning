@@ -1,0 +1,10 @@
+:toc: left
+:toc-title: [目次]
+:toclevels: 3
+:sectnums:
+
+= Ansible
+
+== セクション４：ハンズオン実践
+* `sudo apt update`:パッケージの更新確認
+* `git clone <URL>`:gitプロジェクトを別サーバーに移すことができる
