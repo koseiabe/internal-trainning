@@ -5,8 +5,10 @@
 - name: Setup nginx server on myserver list (host group)
   hosts:
     - devservers
-    - testservers
   become: true
+  vars:
+    html_path: /var/www/html/
+
   tasks:
     # 1. インストール（Ubuntu用にaptモジュールへ変更）
     - name: Install the latest version of nginx
@@ -37,6 +39,15 @@
     # 5. コピー
     - name: Ansible copy file to remote server
       copy:
-        src: "/home/ubuntu/index.html"
-        dest: "/var/www/html/index.html"
-        mode: 644
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+          <meta charset="UTF-8">
+          </head>
+          <body>
+          <h1>このページはcopyモジュールのcontentパラメータを使用してコピーしたページです！</h1>
+          </body>
+          </html>
+        dest: "{{ html_path }}/index.html"
+
