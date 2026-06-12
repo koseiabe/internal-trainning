@@ -170,11 +170,19 @@ Ubuntu系→/var/www/html/ +
         sudo mkdir download-derectory +
         cd download-derectory +
         sudo touch download-file.txt +
+
 |===
 
+=== ハンズオン１５：get_urlモジュール準備
+* `get_urlモジュール`:操作対象のサーバーに対してインターネットや社内サーバーからファイルをダウンロードするために使うモジュール +
+※ wgetやcurlコマンドと同様の役割
 
-
-
+|===
+|`<a href="download-derectory/download-file.txt" download>download-file.txtをダウンロード</a>`
+|`<a>~</a>`:Webサイトに"リンク"を貼るための命令
+|`href="<リンク先のファイルパス>"`:リンク先のファイルのパスを指定する
+|`download>download-file.txtをダウンロード`:これによりリンクがクリックされたときダウンロードということを指定している
+|===
 
 
 
