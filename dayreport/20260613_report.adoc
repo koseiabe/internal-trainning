@@ -156,13 +156,11 @@ access_log {{ access_log_path }}; ←変数の展開（変数定義はplaybook�
 |===
 
 === ハンズオン２３：カスタムモジュール
-|===
-|カスタムモジュールの最低限必要な構成要素 +
+* カスタムモジュールの最低限必要な構成要素 +
 . ansibleモジュールのimportする
 . importしたansibleモジュールの初期化する
 . ansibleからパラメーターを取得する
 . ansibleに処理結果を返す記述をする
-|===
 
 * reモジュール：pythonで正規表現を使って文字列検索や抽出、置換などの処理が行うための標準ライブラリ
 * モジュールのインスタンス：モジュールにパラメータを流して実際に動く状態にしたもの。=タスクと同じもの
@@ -171,12 +169,11 @@ access_log {{ access_log_path }}; ←変数の展開（変数定義はplaybook�
 ※ 必ず#オブジェクト.メソッド()#のように、繋いで呼び出される
 * lambda関数：pythonのみで作成できる関数 +
 例：lambda <引数>: <処理内容> +
-* 
 
 |===
-#!/usr/bin/env python                                          ←pythonでのシェルスクリプト +
+#!/usr/bin/python3                                            ←pythonでのシェルスクリプト +
  +
-import re                                                      ←**reモジュールをimportしている** +
+import re                                                      ←**★reモジュールをimportしている** +
 from ansible.module_utils.basic import AnsibleModule           ←basicというクラスからAnsibleModuleだけをimportする記述 +
  +
 def main():                                                    ←main関数定義 +
@@ -184,27 +181,32 @@ def main():                                                    ←main関数定�
     module_args = dict(                                        ←dict=ディクショナリーオブジェクト作成関数 +
         input_file=dict(type='str', required=True) +
     ) +
-    module = AnsibleModule(                                    ←**Ansibleモジュールクラスのインスタンスを作成している。以下の二つの引数が必要** +
+    module = AnsibleModule(                                    ←**★Ansibleモジュールクラスのインスタンスを作成している。以下の二つの引数が必要** +
         argument_spec=module_args,                             ←モジュールが受け取る引数のルールを定義している。ここでは上で指定したmodule_aegsというルールを採用する +
         supports_check_mode=True                               ←モジュールに冪等性を採用するかしないか +
     ) +
  +
-    input_file = module.params['input_file']                   ←**ansibleから受け取った"input_file"という引数を"input_file"という変数に格納している** +
+    input_file = module.params['input_file']                   ←**★ansibleから受け取った"input_file"という引数を"input_file"という変数に格納している** +
     with open(input_file, 'r') as f:                           ←変数input_fileに格納されたファイルを読み取り専用で開き、変数fに格納し自動で閉じるという命令文 +
         html = f.read()                                        ←前の処理で変数fに格納されたデータを読み取り、変数htmlに格納する +
  +
     # Convert all lowercase characters to uppercase            +
-    html = re.sub(r'[a-z]', lambda m: m.group(0).upper(), html) ←小文字から大文字に変換する支持を記述している +
+    html = re.sub(r'[a-z]\', lambda m: m.group(0).upper(), html) ←小文字から大文字に変換する支持を記述している +
  +
     # Save modified HTML to the same file +
     with open(input_file, 'w') as f:                           ←open関数でinput_fileを書き込み専用で開き上書きするようにしている +
         f.write(html)                                          ←変数htmlに格納されている文字列をファイルに上書きしている。（小文字から大文字） +
  +
-    module.exit_json(changed=True, result=input_file)          ←**module.exit_jsonというのは成功か終了の合図を送るメソッド。changedの時に黄色になる。resultは戻り値であるため、指定した値を実行後に返してくれる。** +
+    module.exit_json(changed=True, result=input_file) +
+←**★module.exit_jsonというのは成功か終了の合図を送るメソッド。changedの時に黄色になる。resultは戻り値であるため、指定した値を実行後に返してくれる。** +
  +
-if __name__ == '__main__':                                     ←pythonでスタート位置をハッキリさせるために使われる決まり文句+
+if __name__ == '__main__':                                     ←pythonでスタート位置をハッキリさせるために使われる決まり文句 +
     main()                                                     ←main関数の呼び出し +
 |===
+* `#!/usr/bin/python3`:pythonのバージョンを環境にあったものにしておく必要がある
+* カスタムモジュールを読み込むために、ansible.cfgファイルでライブラリのパスを指定しておくこと +
+※ カスタムモジュールをライブラリの指定パス直下に置くことで読み込まれる +
+* `#module_utils`:カスタムモジュールで使いまわせる「共通の関数やクラス」を置いておくための自作の共有ライブラリ置き場#
 
 |===
     # 6. カスタムモジュール実行 +
