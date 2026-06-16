@@ -1,0 +1,6 @@
+[devservers]
+ansible-dev-target1 ansible_host=<ipアドレス> ansible_connection=ssh ansible_user=ubuntu
+ansible-dev-target2 ansible_host=<ipアドレス> ansible_connection=ssh ansible_user=ubuntu
+[testservers]
+ansible-test-target1 ansible_host=<ipアドレス> ansible_connection=ssh ansible_user=ubuntu
+ansible-test-target2 ansible_host=<ipアドレス> ansible_connection=ssh ansible_user=ubuntu

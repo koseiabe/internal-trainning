@@ -1,0 +1,23 @@
+# /roles/db_server_role/tasks/main.yaml
+
+# 6. DBサーバーのインストール
+- name: Install PostgreSQL
+  apt:
+    name: postgresql
+    state: present
+
+# 8. DBの起動と自動起動有効化
+- name: Start Postgresql
+  service:
+    name: postgresql
+    state: started
+    enabled: true
+
+# 9. バージョン取得
+- name: Get Postgresql version
+  command: psql --version
+
+# 10. ステータス取得
+- name: Get status of Postgresql service
+  command: systemctl status postgresql
+
