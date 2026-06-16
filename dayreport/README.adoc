@@ -17,4 +17,3 @@
 * link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260611_report.adoc[nginxインストールと起動、fileモジュール、copyモジュール]
 * link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260612_report.adoc[vars、script、lineinfile、shellモジュール等]
 * link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260615_report.adoc[get_url、template、user、setup、カスタムモジュール等]
-* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260616_report.adoc[role、yumモジュール]
