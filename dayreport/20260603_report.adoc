@@ -9,17 +9,17 @@
 == セクション１０：標準入力、引数、if文
 
 
-=== if 文形式１
-#if test <条件文>; then#
+=== if test＜条件文>
+* `if test <条件文>; then`
 
+.文字列比較
 |===
-|文字列の比較
 |`==`: 等しいか    ("$\{OS}" == "Linux")
 |`!=`:等しくないか ("$\{OS}" != "Linux")
 |===
 
+.数値比較オプション
 |===
-|数値の比較
 |`-eq`:等しいか(equal)
 |`-ne`:等しくないか(not equal)
 |`-it`:より小さいか(less than)
@@ -30,22 +30,36 @@
 * 文字列・数値比較スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_03_if.sh
 
 
-=== if 形式2
-#if [<条件文>]; then# +
-* `if [ "${name}" == "Taro" ]; then`
-* `elif [ "${name}" != "Hanako" ]; then`
+=== if [] 形式
 
+[source]
+----
+# 例
+if [<条件文>]; then
+if [ "${name}" == "Taro" ]; then
+elif [ "${name}" != "Hanako" ]; then
+----
 
-=== if 形式3
-#if [[<条件文>]]; then# +
-* `if [[ "${name}" == "Taro" ]]; then`
-* `elif [[ "${name}" != "Hanako" ]]; then`
+=== if [[]] 形式
 
+[source]
+----
+# 例
+if [[<条件文>]]; then
+if [[ "${name}" == "Taro" ]]; then
+elif [[ "${name}" != "Hanako" ]]; then
+----
 
-=== if 形式４(数値比較)
-#if\((条件式)); then# +
-* `if (( "${age}" >= 60 )); then` #60以上か
-* `elif (( "${age}" > 20 )); then` #20より大きいか +
+=== if () 形式→数値比較に用いる
+
+[source]
+----
+# 例
+if\((条件式)); then
+if (( "${age}" >= 60 )); then   #60以上か
+elif (( "${age}" > 20 )); then  #20より大きいか
+----
+
 ※\((条件文))の形式の際は、数値比較時に"<","<="を使っても正しく数値が認識される
 * 数値比較スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_05_if.sh
 
@@ -58,25 +72,25 @@
 
 
 === if 文「OR」
-#複数条件のどれかを満たす場合に実行# +
-* `if [[ 条件式1 #||# 条件式2 ]]; then`
-* `if (( 条件式1 #||# 条件式2 )); then`
-* `if [ 条件式1 #-o# 条件式2 ]; then`
+if文「OR」:: 複数条件のどれかを満たす場合に実行
+* `if [[ 条件式1 #||# 条件式2 ]]; then`:[[ ]]
+* `if (( 条件式1 #||# 条件式2 )); then`:(( ))
+* `if [ 条件式1 #-o# 条件式2 ]; then`:[ ]
 * ORスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_08_if_or.sh
 
 
 === if 文「AND」
-#複数条件をすべてを満たす場合に実行# +
-* `if [[ 条件式1 #&&# 条件式2 ]]; then`
-* `if (( 条件式1 #&&# 条件式2 )); then`
-* `if [ 条件式1 #-a# 条件式2 ]; then`
+if文「AND」:: 複数条件をすべてを満たす場合に実行
+* `if [[ 条件式1 #&&# 条件式2 ]]; then`:[[ ]]形式
+* `if (( 条件式1 #&&# 条件式2 )); then`:(( ))形式
+* `if [ 条件式1 #-a# 条件式2 ]; then`:[ ]形式
 * ANDスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_09_if_and.sh
 
 
 === 特殊なif 文
 * `if [[ #-z# "${my_var}" ]]; then`:変数が設定されていない場合の処理
 * `if [[ #-n# "${my_var}" ]]; then`:変数が設定されている場合の処理
-* `if [[ "${name}" == #*Ta*# ]]; then`:変数にTaが含まれているか
+* `if [[ "${name}" == #*Ta*# ]]; then`:変数に格納された値の中でTaを含む時にループされる処理
 * 特殊if文スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_10_special.sh
 * ファイルチェックスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day09/09_11_file_check.sh
 
@@ -85,20 +99,22 @@
 == セクション１１：ループ処理
 
 === for
-* `#for name in ${}`:${}に入れた値がループ処理される#
-* 変数の前後に""を付けない理由は、要素をスペースで区切った場合に一つの文字列として判断されてしまうため
+forループ:: i入れた値がループ処理される
+* `#for name in ${}#` +
+※ 変数の前後に""を付けない理由は、要素をスペースで区切った場合に一つの文字列として判断されてしまうため
 * forスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_01_for.sh
 * forスクリプト(数値): https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_02_for.sh +
 ※seqコマンドでも実行することができる。${ seq 0 2 5}で２つ飛ばし
 
 
 === 辞書利用
-#配列要素に対応する値を入れることができる# +
+* 配列要素に対応する値を入れることができる
 * 辞書検索スクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_02_dictionary.sh
 
 
 === continueとbreak
-* `continue`:処理を飛ばすことことができる +
+continue,breakコマンド:: ループ処理の流れを制御することに用いるコマンド
+* `continue`:処理を飛ばす +
 ※特定の条件下で処理を飛ばしたい場合に用いられる
 * `break`:処理を終了させる
 * continueとbreakスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_03_continue_break.sh
@@ -106,24 +122,14 @@
 
 
 === while
-#指定条件を満たしている間はループする# +
+whileループ:: 指定条件を満たしている間はループする
 * whileループは条件を満たしている間無限ループしてしまうため、終了どころを必ず記述する 
 * whileスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_06_while.sh
 
 
 === until
-#指定条件を満たすまでループする# +
+untilループ:: 指定条件を満たすまでループする
 * whileループの逆 
 * untilスクリプト: https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_07_until.sh
 * 応用演習： https://github.com/koseiabe/internal-trainning/blob/main/script/day10/10_08_example.sh
-
-
-
-== セレクション１２：標準出力、エラー出力、ファイル入出力
-
-=== 標準出力
-* `>`:上書き
-* `>>`:追記
-
-
 
