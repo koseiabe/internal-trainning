@@ -1,0 +1,50 @@
+# install Nginx using Ansible
+# Start and Enable Nginx
+# Check the status of Nginx
+# Collect host information
+- name: Setup nginx server on myserver list (host group)
+  hosts:
+    - devservers
+  become: true
+
+  tasks:
+    # 1. インストール（Ubuntu用にaptモジュールへ変更）
+    - name: Install the latest version of nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+
+    # 2. 起動と自動起動有効化（1つのタスクにまとめられます）
+    - name: Start and Enable nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    # 3. バージョン取得（registerとchanged_whenを追加）
+    - name: Get nginx Installed version
+      ansible.builtin.command: nginx -v
+      register: nginx_version
+      changed_when: false
+
+    # 4. nginxのステータスを取得（registerとchanged_whenを追加）
+    - name: Get status of nginx service
+      ansible.builtin.command: systemctl status nginx
+      register: nginx_status
+      changed_when: false
+
+    # 5. ターゲットのhomeディレクトリ直下にディレクトリを作成
+    - name: Create directory
+      file:
+        path: /home/ubuntu/registervar
+        state: directory
+      register: create_dir
+          
+    # 6. ファイルの作成
+    - name: Create file
+      file:
+        path: /home/ubuntu/registervar/registervar.txt
+        state: touch
+      when: create_dir.chenged
+    
