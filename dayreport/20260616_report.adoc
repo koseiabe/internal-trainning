@@ -56,14 +56,16 @@
 [source, yaml]
 ----
 my-ansible-project/        # プロジェクトのルートディレクトリ
-├── site.yaml              # 実行するプレイブック
-├── hosts                  # インベントリファイル（環境による）
+├── install_nginx.yaml              # 実行するプレイブック
+├── inventory.yaml                  # インベントリファイル（環境による）
 └── roles/                 # 👈 ここに「roles」という名前で作る
     ├── webserver/         # 自作または取得したロール1
     │   ├── tasks/
+    |   |    ├──main.yaml 
     │   └── handlers/
     └── dbserver/          # 自作または取得したロール2
         ├── tasks/
+        |   ├── main.yaml
         └── vars/
 ----
 
