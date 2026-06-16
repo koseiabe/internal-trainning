@@ -8,180 +8,184 @@
 == セクション４：ハンズオン実践
 
 === ハンズオン５：コピー（ファイルの中身を指定して）
-* `content:`:playbookに記述することでテキストデータの中身を指定することができる
+contentパラメータ:: playbookに記述することでテキストデータの中身を指定することができる
 
-|===
-   # 5.ファイルの中身を指定してコピー +
-    - name: Ansible copy file to remote server +
-      copy: +
-        content: \| +
-          <!DOCTYPE html> +
-          <html> +
-          <head> +
-          <meta charset="UTF-8"> +
-          </head> +
-          <body> +
-          <h1>このページはcopyモジュールのcontentパラメータを使用してコピーしたページです！</h1> +
-          </body> +
-          </html> +
-        dest: "/var/www/html/index.html" +
-|===
-* htmlファイルの格納場所は +
+----
+   # 5.ファイルの中身を指定してコピー
+    - name: Ansible copy file to remote server
+      copy:
+        content: \|
+          <!DOCTYPE html>
+          <html>
+          <head>
+          <meta charset="UTF-8">
+          </head>
+          <body>
+          <h1>このページはcopyモジュールのcontentパラメータを使用してコピーしたページです！</h1>
+          </body>
+          </html>
+        dest: "/var/www/html/index.html"
+----
+* [underline]#htmlファイルの格納場所は# +
 Redhat系→/usr/share/nginx/html/ +
-Ubuntu系→/var/www/html/ +
+Ubuntu系→/var/www/html/
 
 
 === ハンズオン６：vars変数（playbook内定義）
-* `#vars:#`:変数定義を表す +
+varsモジュール:: 変数定義を表す +
 ※ playbook内で変数定義する際は、サマリ部に記述する
-* `#{{ 変数 }}#`:変数の展開 +
-※ 同じパスが何度も出てくる場合などに定義 +
-※ playbookの規模が小さいときなど
 
-|===
-|変数定義例
-|vars: +
-   html_path: /var/www/html/
-|変数展開例
-|dest: "{{ html_path }}/index.html"
-|===
+{{ 変数}}:: 変数の展開 +
+※ 同じパスが何度も出てくる場合などに定義、playbookの規模が小さいときなど
+
+[source, yaml]
+----
+# 変数定義例(サマリ部に記述)
+vars:
+  html_path: /var/www/html/
+# 変数展開例
+dest: "{{ html_path }}/index.html"
+----
+
 
 === ハンズオン７：vars変数（外部ファイル定義）
 * 外部ファイルの読み込みは外部ファイルを用いるタスクの直前に記述すること
-* `#include_vars:#`:このモジュールは、外部ファイルに記述した変数の設定を一括で読み込むことできる
-* `html_path: /var/www/html/`:外部ファイルでの変数定義例 +
-※ yaml形式のファイルにて
+* `html_path: /var/www/html/`:外部ファイルでの変数定義例
 
-|===
+include_varsモジュール:: このモジュールは、外部ファイルに記述した変数の設定を一括で読み込むことできる
+
+[source, yaml]
+----
     # 5. 外部ファイルの読み込み
-     - name: Read external variable file +
-       include_vars: vars.yaml +
-    # 6. コピー +
-    - name: Ansible copy file to remote server +
-      copy: +
-        content: \| +
-          <!DOCTYPE html> +
-          <html> +
-          <head> +
-          <meta charset="UTF-8"> +
-          </head> +
-          <body> +
-          <h1>このページはcopyモジュールのcontentパラメータを使用してコピーしたページです！</h1> +
-          </body> +
-          </html> +
-        dest: "{{ html_path }}/index.html" +
-|===
+     - name: Read external variable file
+       include_vars: vars.yaml
+
+    # 6. コピー
+    - name: Ansible copy file to remote server
+      copy:
+        content: \|
+          <!DOCTYPE html>
+          <html>
+          <head>
+          <meta charset="UTF-8">
+          </head>
+          <body>
+          <h1>このページはcopyモジュールのcontentパラメータを使用してコピーしたページです！</h1>
+          </body>
+          </html>
+        dest: "{{ html_path }}/index.html"
+----
 
 === ハンズオン８：register変数
-* `#register: <変数>#`:指定したタスクの実行結果を変数に格納することができる変数 
-* `when: <変数>.changed`:タスクステータスがchangedの時にタスクを実行をするモジュール
+registerモジュール:: 指定したタスクの実行結果を変数に格納することができる変数 
+when: <変数>.changed:: 変数に格納されたタスクがステータスchangedの時にタスクを実行をするモジュール
 
 === ハンズオン９：scriptモジュール
-* `#scriptm: <スクリプトファイル>#`:手元（master）にあるスクリプトファイルを相手のサーバでそのまま実行することができるモジュール +
-※ 今回の場合はplaybookとscriptファイルが同じディレクトリだったためファイル名のみ記述
+scriptモジュール:: 手元（master）にあるスクリプトファイルを相手のサーバでそのまま実行することができるモジュール
+※ 今回の場合はplaybookとscriptファイルが同じディレクトリだったためスクリプトファイル名のみで指定した
 
-|===
-    - name: Run a script +
+[source, yaml]
+----
+		# 5. スクリプトモジュール実行
+    - name: Run a script
       #script: script.sh#
-|===
+----
 
 === ハンズオン１０：debugモジュール
-* `#debug: <>#`:指定したメッセージを画面表示したり、変数の中身を一時的に出力したりすることができるモジュール +
-※ bashのechoやprint()と同じ役割  +
+debugモジュール:: 指定したメッセージを画面表示したり、変数の中身を一時的に出力したりすることができるモジュール +
+※ bashのechoやprint()と同じ役割 +
 * debugとは原因究明という意味
-* `state: absent`:この記述は対象ファイルやパッケージを消去することを意味する命令
 
-|===
-   # 6. ファイルの削除 +
-    - name: Delete file +
-      file: +
-        path: /home/ubuntu/filemodule/filemodule.txt +
-        #state: absent# +
-      register: file_delete +
- +
-    # 7. debug +
-    - name: print file delete status +
-      debug: +
-        msg: "ファイルの削除に成功しました" +
+[source, yaml]
+----
+   # 6. ファイルの削除
+    - name: Delete file
+      file:
+        path: /home/ubuntu/filemodule/filemodule.txt
+        #state: absent#
+      register: file_delete
+
+    # 7. debug
+    - name: print file delete status
+      debug:
+        msg: "ファイルの削除に成功しました"
       when: file_delete.changed
-
-|===
+----
 
 === ハンズオン１１：lineinfileモジュール（行追加）
-* `#lineinfile:#`:ファイル内の特定の行を検索、書き換え、追加、削除などができるモジュール 
-* `line: <実行したい文字列>`:lineinfileモジュールで、最終的になっていてほしい状態を記述
-* `insertafter: <行指定>`:実行したい文字列をどの行の直後に行うか明示する
-* `^`:行頭を表す
-* `$`:行末を表す
+lineinfileモジュール:: ファイル内の特定の行を検索、書き換え、追加、削除などができるモジュール 
+lineパッケージ:: lineinfileモジュールで、最終的になっていてほしい状態を記述
+insertafterパッケージ:: 実行したい文字列をどの行の直後に行うか明示する
+\^:: 行頭を表す
+$:: 行末を表す
 
-|===
-    # 5. lineinfileによる指定ファイルへ行挿入 +
-    - name: Ansible insert line to remote server file +
-      lineinfile: +
-        path: "{{ html_path }}/index.html" +
-        line: "<h1>この行はlineinfileで追加しています！</h1>" +
-        #insertafter: "\^<h1>.*$"# +
-      register: insert_line +
- +
-    # 7. debugで行追加完了を出力 +
-    - name: Print insert status +
-      debug: +
-        msg: "行追加に成功しました" +
+[source, yaml]
+----
+    # 5. lineinfileによる指定ファイルへ行挿入
+    - name: Ansible insert line to remote server file
+      lineinfile:
+        path: "{{ html_path }}/index.html"
+        line: "<h1>この行はlineinfileで追加しています！</h1>"
+        insertafter: "\^<h1>.*$"
+      register: insert_line
+
+    # 7. debugで行追加完了を出力
+    - name: Print insert status
+      debug:
+        msg: "行追加に成功しました"
       when: insert_line.changed
-
-|===
+----
 
 === ハンズオン１２：lineinfile（変更）
-* `regexp:` (Regular Expression):行置換の際に、置換したい行を指定できる
+regexp(Regular Expression):: lineinfileモジュールで行置換を行う際、置換したい行を指定できる
 
-|===
-    # 6. lineinfileによる行変更 +
-    - name: Ansible changed line to remote server file +
-      lineinfile: +
-        path: "{{ html_path }}/index.html" +
-        line: "<h1>この行はlineinfileで変更しています！</h1>" +
-        #regexp: "\^<h1>この行はlineinfileで追加しています！</h1>$"# +
-      register: changed_line +
- +
-    # 7. debugで行変更完了を出力 +
-    - name: Print changed status +
-      debug: +
-        msg: "行変更に成功しました" +
+[source, yaml]
+----
+    # 6. lineinfileによる行変更
+    - name: Ansible changed line to remote server file
+      lineinfile:
+        path: "{{ html_path }}/index.html"
+        line: "<h1>この行はlineinfileで変更しています！</h1>"
+        regexp: "\^<h1>この行はlineinfileで追加しています！</h1>$"
+      register: changed_line
+
+    # 7. debugで行変更完了を出力
+    - name: Print changed status
+      debug:
+        msg: "行変更に成功しました"
       when: changed_line.changed 
-
-|===
+----
 
 === ハンズオン１３：lineinfile（削除）
-* 削除する際は"line:"モジュール行を"state: absent"に変更した +
-※ 何をしているのかわかるように変数名やタスク名を変更すること
+state: absent:: パッケージでabsentを指定することで削除を意味する
 
 === ハンズオン１４：shellモジュール
-* `shell:`:playbook内でスクリプトを作成し実行する
-* scriptモジュール→多数のコマンドをまとめて実行する場合〇 +
+shell:: playbook内でスクリプトを作成し実行する
+scriptモジュール:: 多数のコマンドをまとめて実行する場合〇 +
 ※ 複数のサービス起動、パッケージインストール、異常検知時のアラートを送信、DBのバックアップから復元する場合など +
-* shellモジュール→少数のコマンドを実行する場合〇
-* scriptモジュールはマスターのスクリプトファイルを実行するが、shellモジュールはplaybook内に記載したスクリプトを実行する違いがある
+shellモジュール:: 少数のコマンドを実行する場合〇 +
+※ scriptモジュールはマスターのスクリプトファイルを実行するが、shellモジュールはplaybook内に記載したスクリプトを実行する違いがある
 
-|===
-    # 5. shellモジュールを使ったファイル作成 +
-    - name: Run shell script +
-      #shell: \|# +
-        cd /var/www/html/ +
-        sudo mkdir download-derectory +
-        cd download-derectory +
-        sudo touch download-file.txt +
-
-|===
+[source, yaml]
+----
+    # 5. shellモジュールを使ったファイル作成
+    - name: Run shell script
+      shell: |
+        cd /var/www/html/
+        sudo mkdir download-derectory
+        cd download-derectory
+        sudo touch download-file.txt
+----
 
 === ハンズオン１５：get_urlモジュール準備
-* `get_urlモジュール`:操作対象のサーバーに対してインターネットや社内サーバーからファイルをダウンロードするために使うモジュール +
+get_urlモジュール:: 操作対象のサーバーに対してインターネットや社内サーバーからファイルをダウンロードするために使うモジュール +
 ※ wgetやcurlコマンドと同様の役割
 
 |===
 |`<a href="download-derectory/download-file.txt" download>download-file.txtをダウンロード</a>`
-|`<a>~</a>`:Webサイトに"リンク"を貼るための命令
-|`href="<リンク先のファイルパス>"`:リンク先のファイルのパスを指定する
-|`download>download-file.txtをダウンロード`:これによりリンクがクリックされたときダウンロードということを指定している
+|`<a>~</a>` : Webサイトに"リンク"を貼るための命令
+|`href="<リンク先のファイルパス>"` : リンク先のファイルのパスを指定する
+|`download>download-file.txtをダウンロード` : これによりリンクがクリックされたときダウンロードということを指定している
 |===
 
 
