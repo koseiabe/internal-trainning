@@ -1,1 +1,19 @@
+= 学習事項一覧
 
+== vim
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260529_report.adoc[vim操作、ショートカット、touchコマンド等]
+
+== bash
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260601_report.adoc[ユーザ系コマンド、リンク作成、シェルスクリプト基礎]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260602_report.adoc[変数、配列、計算式、引数指定]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260603_report.adoc[if文、各ループ処理]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260604_report.adoc[標準出力、エラー出力、realpathコマンド、dirnameコマンド、終了ステータス]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260605_report.adoc[awkコマンド、xargsコマンド、findコマンド等]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260608_report.adoc[ループ演習、プロセス、ジョブ、case文、select文、関数]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260609_report.adoc[trap、ファイル圧縮解凍、リソース解析コマンド]
+
+== ansible
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260610_report.adoc[IaC概要、Ansibleの仕組み]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260611_report.adoc[nginxインストールと起動、fileモジュール、copyモジュール]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260612_report.adoc[vars、script、lineinfile、shellモジュール等]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260615_report.adoc[get_url、template、user、setup、カスタムモジュール等]
