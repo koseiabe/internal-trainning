@@ -11,45 +11,47 @@
 ※"retval"(return value)は戻り値(返り値)を一時的に保存するために使われる変数名
 
 
-
 == セクション１８：trap デバック クーロン
 
 === trap
-#シェルスクリプトがシグナルを受けとった場合に実行される処理を定義できる# +
+trap:: シェルスクリプトがシグナルを受けとった場合に実行される処理を定義できる
 
-* `trap <関数名(コマンド名)> <シグナル番号>`:trap定義
-* trap基本script: https://github.com/koseiabe/internal-trainning/tree/main/script/day17/17_01_trap.sh +
+* `trap <関数名(コマンド名)> <シグナル番号>` : trap定義
+* trap基本script: https://github.com/koseiabe/internal-trainning/tree/main/script/day17/17_01_trap.sh
 * trap応用script: https://github.com/koseiabe/internal-trainning/tree/main/script/day17/17_02_trap.sh +
 ※ "ctrl+c"で処理が中断されたときに、中途半端に作成されたファイルなどをtrapで定義しておくことで削除することができる
 
 
 === デバッグモード
-#シェルスクリプトを実行した際に実際に行われている処理を可視化することができる# +
+デバッグモード:: シェルスクリプトを実行した際に実際に行われている処理を可視化することができる
 
 * `set -x`:デバッグモード
 * `set +x`:デバッグモード解除 +
-※\#!/bin/bashの後に"-x"を付けるとファイル全体をデバッグモードにすることができる
-* デバッグscript: https://github.com/koseiabe/internal-trainning/tree/main/script/day17/17_03_debug.sh +
+※ #!/bin/bashの後に"-x"を付けるとファイル全体をデバッグモードにすることができる
+* デバッグscript: https://github.com/koseiabe/internal-trainning/tree/main/script/day17/17_03_debug.sh
 
 |===
-置換:%s/before/after/g
-範囲指定置換(チェックあり):%s/before/after/gc
+|ファイル全体置換:%s/before/after/g
+|範囲指定置換(チェックあり):%s/before/after/gc
 |===
 
 
 === Corn
-#決められた時間にコマンドやスクリプトを実行する機能# +
+Corn:: 決められた時間にコマンドやスクリプトを実行する機能
 
-* `#分 時間 日 月 曜日 <ユーザ名> <実行コマンド>`:Cornフォーマット#
-* `-`:幅を表す（0-9:０時から９時）
-* `,`:リストを表す（0,3,14:0,3,14時）
-* `/`:間隔を表す（*/3:0,3,6,9,...,21時）
- +
-* `/etc/cron.d`:いつ実行するのか設定を記述したファイルを格納するディレクトリ
-* `/etc/cron.{hourly,daily,weekly,monthly}/`:毎時、毎日、毎週、毎月に実行されるジョブを格納するディレクトリ
-* `/etc/crontab`:ジョブを記載するファイル +
+* `分 時間 日 月 曜日 <ユーザ名> <実行コマンド>` : Cornフォーマット#
+
+|===
+|`-`:幅を表す（0-9:０時から９時）
+|`,`:リストを表す（0,3,14:0,3,14時）
+|`/`:間隔を表す（*/3:0,3,6,9,...,21時）
+|===
+
+* `/etc/cron.d` : いつ実行するのか設定を記述したファイルを格納するディレクトリ
+* `/etc/cron.{hourly,daily,weekly,monthly}/` : 毎時、毎日、毎週、毎月に実行されるジョブを格納するディレクトリ
+* `/etc/crontab` : ジョブを記載するファイル +
 ※これらのディレクトリやファイルはrootユーザ権限
-* `#crontab`:cron設定用コマンド +
+* `crontab`:cron設定用コマンド +
 ※各ユーザーのcron設定用のファイル"/var/spool/cron"を編集・表示する +
 
 |===
@@ -66,120 +68,116 @@
 == セクション１９：systemctl,圧縮解凍,リソース解析
 
 === init プロセス
-* システム起動時に最初に起動され、他のプロセスを起動する役目を持ったプロセス +
+initプロセス:: システム起動時に最初に起動され、他のプロセスを起動する役目を持ったプロセス
 ※全プロセスの根源 +
 * initプロセスの種類:systemd
 
 
 === systemctl
-#systemdで制御しているサービスを管理するコマンド# +
+systemctl:: systemdで制御しているサービスを管理するコマンド
 
 * `systemctl <オプション> <サービス名>`:コマンドフォーマット
 * `/etc/systemd/system` `/usr/lib/systemd/system`:この２つのディレクトリに各サービスの設定を記述したファイルを格納している
 * `Unit(ユニット)`:systemdが立ち上げるプログラムの単位
 
-|===
-|設定内容一覧例
-|[Unit] +
-Description=My Custom Python App (自作アプリの概要) +
-After=network.target            # ネットワークが繋がってから起動 +
- +
-\[Service] +
-Type=simple +
-User=myuser                    # セキュリティのため一般ユーザーで実行 +
-ExecStart=/usr/bin/python3 /opt/myapp/app.py  # 動かしたいコマンド +
-Restart=always                 # 落ちたら自動再起動！ +
- +
-\[Install] +
+[source]
+----
+# 設定内容一覧例
+[Unit]
+Description=My Custom Python App (自作アプリの概要)
+After=network.target            # ネットワークが繋がってから起動
+
+[Service]
+Type=simple
+User=myuser                    # セキュリティのため一般ユーザーで実行
+ExecStart=/usr/bin/python3 /opt/myapp/app.py  # 動かしたいコマンド
+Restart=always                 # 落ちたら自動再起動！
+
+[Install]
 WantedBy=multi-user.target     # 通常のOS起動時に自動起動させるための設定
-|===
+----
 
-
-* デーモン化:バックグラウンドで動き続ける状態にすること
-* バイナリファイル:テキストとして読めない２新数のデータで構成されたファイル
-* コンパイル:ソースコード（人間が書いたプログラミング言語）をコンピュータが直接理解できる言葉に翻訳する作業
+デーモン化:: バックグラウンドで動き続ける状態にすること
+バイナリファイル:: テキストとして読めない２新数のデータで構成されたファイル
+コンパイル:: ソースコード（人間が書いたプログラミング言語）をコンピュータが直接理解できる言葉に翻訳する作業
 
 
 === 圧縮解凍(gzip)
+* `gzip -r`:ディレクトリ内ファイルも再帰的に圧縮 +
 圧縮例：gzip <ファイル名> +
-* `gzip -r`:ディレクトリ内ファイルも再帰的に圧縮
 * `gzip -d`:ファイルを解凍 +
-例：gzip -d <ファイル名.gz>
+解凍例：gzip -d <ファイル名.gz>
 
 
 === 圧縮解凍(zip,unzip)
-#元のファイルを残した状態で圧縮できる# +
+zip,uzip:: 元のファイルを残した状態で圧縮できる
 
-* windosでよく用いられる +
-圧縮例：zip <圧縮ファイル名> <圧縮したいファイル> +
 * `zip -r`:再帰的圧縮
 * `unzip <解凍したいファイル.zip>`:ファイル解凍 +
+圧縮例：zip <圧縮ファイル名> <圧縮したいファイル>
 
 
 === ★ tar コマンド
-#圧縮解凍するコマンド# +
+tar:: 圧縮解凍するコマンド
 
-* `-c`:圧縮
-* `-x`:解凍
-* `-f`:対象ファイル・ディレクトリ指定
-* `-v`:処理されたファイル一覧表示
-* `-z`:gzip形式で（拡張子が.tar.gz）
-* `-J`:xz形式で（.tar.xz） +
+.tarコマンドオプション一覧
+|===
+|`-f`:対象ファイル・ディレクトリ指定
+|`-v`:処理されたファイル一覧表示
+|`-z`:gzip形式で（拡張子が.tar.gz）
+|`-J`:xz形式で（.tar.xz） +
+|===
 例："tar -xvfJ <解凍したファイル.tar.xz>" +
 例："tar -zcvf <圧縮名.tar.gz> <圧縮したいファイル>" +
 
 === du コマンド
-#ファイルやディレクトリの容量を調べるコマンド# +
-
+duコマンド:: ファイルやディレクトリの容量を調べるコマンド
 * `-sh`:合計容量を人間に分かりやすく表示
 
 
 === vmstat コマンド
-#CPU,メモリ,SWAP,IOなどの情報を表示# +
+vmstat:: CPU,メモリ,SWAP,IOなどの情報を表示
 
-=== iosta tコマンド
+
+=== iostat コマンド
 * `-x`:I/Oデバイスの使用状況を詳細表示 +
-※ "%util"という項目でデバイスのバンド幅使用率が確認でき、90%を超えていないか +
 ※ I/Oデバイス=入出力装置
 
 
 === ★ sar コマンド
-#様々なリソース状況を確認する# +
+sarコマンド:: 様々なリソース状況を確認する
 
-* `-P ALL`:CPU使用率
-* `-q`:ランキューの発生状況（CPUが現在同時に実行しているタスク数）
-* `-r`:メモリの使用状況
-* `-d`:ディスクの利用状況
-* `-n DEV`:ネットワーク使用量
+.sarコマンドオプション一覧
+|===
+|`-P ALL`:CPU使用率
+|`-q`:ランキューの発生状況（CPUが現在同時に実行しているタスク数）
+|`-r`:メモリの使用状況
+|`-d`:ディスクの利用状況
+|`-n DEV`:ネットワーク使用量
+|===
 
 
 === df コマンド
-#デバイスごとのディスク使用料を確認する# 
-
-
-=== du コマンド
-#ディレクトリごとのディスクの使用量を確認する# +
-
-* `du -sh /*`:すべてのディレクトリの使用量が確認できる
+dfコマンド:: デバイスごとのディスク使用料を確認する
 
 
 === watch コマンド
-#コマンドを定期的に実行して結果を画面上に表示する# +
-
+watchコマンド:: コマンドを定期的に実行して結果を画面上に表示する
 * `-d`:変化のあった部分をハイライトで表示
-
 
 
 == セクション２１：実践的なスクリプト作成
 * 古いファイルを削除するscript: https://github.com/koseiabe/internal-trainning/tree/main/script/day20/delete_old_files.sh
 * 容量が大きいファイルのみ圧縮script: https://github.com/koseiabe/internal-trainning/tree/main/script/day20/compress_tar_xz.sh
 
+
 |===
-* wc -l （行数カウント） +
-* cut -d （区切り文字指定） +
-* cut -f （指定列抽出） +
-* sed -e "s/ /,/g" （置換） +
-* tail -n （表示したい行数指定） +
+|演習で用いたコマンド
+|wc -l （行数カウント）
+|cut -d （区切り文字指定）
+|cut -f （指定列抽出）
+|sed -e "s/ /,/g" （置換）
+|tail -n （表示したい行数指定）
 |===
 
 

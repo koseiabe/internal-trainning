@@ -10,11 +10,12 @@
 === ハンズオン５：コピー（ファイルの中身を指定して）
 contentパラメータ:: playbookに記述することでテキストデータの中身を指定することができる
 
+[source, yaml]
 ----
    # 5.ファイルの中身を指定してコピー
     - name: Ansible copy file to remote server
       copy:
-        content: \|
+        content: |
           <!DOCTYPE html>
           <html>
           <head>
@@ -26,7 +27,8 @@ contentパラメータ:: playbookに記述することでテキストデータ�
           </html>
         dest: "/var/www/html/index.html"
 ----
-* [underline]#htmlファイルの格納場所は# +
+
+[underline]#htmlファイルの格納場所# +
 Redhat系→/usr/share/nginx/html/ +
 Ubuntu系→/var/www/html/
 
@@ -116,7 +118,7 @@ debugモジュール:: 指定したメッセージを画面表示したり、変
 lineinfileモジュール:: ファイル内の特定の行を検索、書き換え、追加、削除などができるモジュール 
 lineパッケージ:: lineinfileモジュールで、最終的になっていてほしい状態を記述
 insertafterパッケージ:: 実行したい文字列をどの行の直後に行うか明示する
-\^:: 行頭を表す
+^ :: 行頭を表す
 $:: 行末を表す
 
 [source, yaml]
