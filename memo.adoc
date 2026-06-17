@@ -127,3 +127,12 @@
 * git revert:過去の特定の子mj水戸による変更を完全に打ち消す新しいcommitを追加するコマンド
 * PR:プルリクエスト
 * MR:マージリクエスト
+
+== 20260617
+* docker
+
+=== 振り返り
+WSL:: Windos Subsystem of Linux
+* `lsb_release -a`:ディストリビューションのバージョン確認(ubuntuターミナルから)
+* `wsl.exe --list --online`:WSLでインストール可能なディストリビューション一覧を表示
+* `wsl.exe --install -d [Distro]`:Distroに好みのディストリビューションを入れて実行するとWSLがインストールできる
