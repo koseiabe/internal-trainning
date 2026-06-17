@@ -85,4 +85,145 @@ docker run hello-world
 * コンテナごとの干渉もない
 * コンテナはホストOS間の移動も容易
 
+=== コンテナのライフサイクル
 
+* Created(作成)　→　up(起動)　→　Exited(停止)
+
+
+== Dockerイメージ
+
+* コンテナに必要なソフトウェア・環境変数・設定などの情報が入っている +
+※ コンテナの定義（型）
+* Dockerイメージからコンテナを作る
+* Dockerイメージは変更不可な静的なテンプレート
+* DockerイメージのTagは、各バージョンやディストリビューションで分けられている
+
+=== Dockerイメージの入手方法
+
+. dockerhubから入手
+. dockerファイルから自分仕様に変更し入手
+
+Dockerhub:: Dockerイメージを登録・配布するサイト「https://hub.docker.com/」
+
+
+=== Dockerイメージコマンド
+
+[source]
+----
+# イメージのダウンロード
+docker image pull <イメージ名>
+docker image pull <イメージ名:tag>
+
+# ローカルマシンに存在するイメージ一覧表示
+docker image ls
+
+# イメージの削除
+docker image rm <イメージ名>
+----
+
+== コンテナへのアクション
+
+=== コンテナの作成と実行
+
+[source]
+----
+# イメージからコンテナ作成し起動する
+docker container run <イメージ名>
+
+# ローカルマシンに存在するコンテナ一覧表示
+docker container ls
+
+# 起動していないコンテナもすべて表示される
+docker container ls -a
+----
+※ dockerイメージがない状態でコンテナ作成すると自動でイメージがダウンロードされる
+
+
+=== コンテナの停止と再起動
+
+[source]
+----
+# 起動中コンテナの停止
+docker container stop <コンテナ名かID>
+
+# コンテナの再起動(upにする)
+docker container restart <コンテナ名かID>
+
+# コンテナのログ確認
+docker container logs <コンテナ名かID>
+----
+
+=== コンテナの削除・一括削除・自動削除
+
+[source]
+----
+# 停止済みコンテナ指定削除(Exted状態)
+docker container rm <コンテナ名かID>
+
+# 停止済みコンテナ一括削除
+docker container prune
+
+# コンテナ実行後自動削除
+docker container run --rm <イメージ名>
+
+# 動作中コンテナ強制削除(up状態) 
+docker container rm -f <コンテナ名>
+----
+
+
+=== コンテナをbashで操作
+
+[source]
+----
+# (-i,--interactive):コンテナの標準入力口をopenな状態にする→これがないと、プロンプトから入力した実行がコンテナに届かない。
+docker container run -i <イメージ名>
+
+# (-t,--tty):コンテナ側をターミナル画面を表示される→これがないと、プロンプトやテキストカラーなどが出ない。
+docker container run -t <イメージ名>
+
+# (-it):
+docker container run -it <イメージ名>
+----
+
+=== 任意コマンドに変更(コンテナが実行する)
+
+* 各Dockerイメージにはデフォルトで設定されているコマンドがある +
+例：ubuntu:bashコマンド
+
+[source]
+----
+# Dockerイメージの詳細情報を表示
+docker image inspect <イメージ名>
+
+# イメージからコンテナを起動して任意のコマンドを実行させる
+docker container run -it <イメージ名> <任意コマンド>
+# 実行例
+
+# up状態のコンテナに任意のコマンドを実行させる(execute=実行する)
+docker container exec <コンテナ名> <任意コマンド>
+# exted状態から行う場合
+docker container restart <コンテナ名>
+docker container exec <コンテナ名> <任意コマンド>
+----
+
+=== コンテナ名の指定
+
+[source]
+----
+# 任意のコンテナ名に指定
+docker container run --name <任意のコンテナ名>　<イメージ名>
+----
+ 
+=== フォアグラウンド、デタッチドモード
+
+* デタッチドモード＝バックグラウンド
+
+[source]
+----
+# デタッチドモードでコンテナ実行
+docker cotanier run -d <イメージ名>
+docker container exec -d <コンテナ名>
+
+# デタッチ→フォアグラウンド
+docker container attach <コンテナ名>
+----
