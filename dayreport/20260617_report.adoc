@@ -100,8 +100,8 @@ docker run hello-world
 
 === Dockerイメージの入手方法
 
-. dockerhubから入手
-. dockerファイルから自分仕様に変更し入手
+. dockerhubから入手する
+. dockerfile(設計書)から自分仕様のDockerイメージを作成する
 
 Dockerhub:: Dockerイメージを登録・配布するサイト「https://hub.docker.com/」
 
@@ -117,8 +117,14 @@ docker image pull <イメージ名:tag>
 # ローカルマシンに存在するイメージ一覧表示
 docker image ls
 
+# 全イメージ一覧表示
+docker image ls -a
+
 # イメージの削除
 docker image rm <イメージ名>
+
+# イメージ一括削除(名前なしのみ)
+docker image prune
 ----
 
 == コンテナへのアクション
@@ -133,7 +139,7 @@ docker container run <イメージ名>
 # ローカルマシンに存在するコンテナ一覧表示
 docker container ls
 
-# 起動していないコンテナもすべて表示される
+# 起動していないコンテナもすべて表示される ( -a )
 docker container ls -a
 ----
 ※ dockerイメージがない状態でコンテナ作成すると自動でイメージがダウンロードされる
@@ -163,7 +169,7 @@ docker container rm <コンテナ名かID>
 # 停止済みコンテナ一括削除
 docker container prune
 
-# コンテナ実行後自動削除
+# コンテナ実行後自動削除 ( --rm )
 docker container run --rm <イメージ名>
 
 # 動作中コンテナ強制削除(up状態) 
@@ -210,7 +216,7 @@ docker container exec <コンテナ名> <任意コマンド>
 
 [source]
 ----
-# 任意のコンテナ名に指定
+# 任意のコンテナ名に指定 ( --name )
 docker container run --name <任意のコンテナ名>　<イメージ名>
 ----
  
@@ -220,10 +226,45 @@ docker container run --name <任意のコンテナ名>　<イメージ名>
 
 [source]
 ----
-# デタッチドモードでコンテナ実行
+# デタッチドモードでコンテナ実行 ( -d )
 docker cotanier run -d <イメージ名>
 docker container exec -d <コンテナ名>
 
 # デタッチ→フォアグラウンド
 docker container attach <コンテナ名>
 ----
+
+== DockerfileからDockerイメージ作成
+
+=== Dockerfileの書き方
+
+※ コンテナを直接カスタマイズした場合持ち運びができない。あくまで持ち運べるのはDockerイメージ
+
+* 大文字で命令を記述
+* 命令文に対してパラメータを記述
+
+[source]
+----
+# Dockerfileからイメージ作成
+# <ディレクトリパス>にはdockerfileが置いてあるパスを指定する
+docker image build <ディレクトリパス>
+----
+
+.実行したdockerfile
+[source]
+----
+FROM ubuntu:20.04
+
+RUN apt update
+RUN apt install -y curl
+----
+
+=== イメージ名の変更
+
+[source]
+----
+# イメージ名の変更 ( -t )
+docker image build -t <任意のイメージ名> <ディレクトリパス>
+----
+
+
