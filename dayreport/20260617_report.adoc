@@ -10,10 +10,11 @@
 * コンテナ仮想化技術を使って、アプリケーションを開発・配置。実行するための隔離された環境を提供ツール +
 ※ DockerはホストOSとコンテナの仲介役。
 
-== Docker engine
+=== Docker engine
 
 * Dockerの核心となる技術（本体）
 * コンテナを作る、動かす、管理する等のすべての処理を担っている
+
 
 .Docker engine install
 [source]
@@ -49,6 +50,7 @@ sudo docker run hello-world
 ----
 * 参考元URL:https://docs.docker.com/engine/install/ubuntu/
 
+
 .非rootユーザーでのDocker管理（利用）
 [source]
 ----
@@ -63,15 +65,18 @@ docker run hello-world
 ----
 * 参考元URL:https://docs.docker.com/engine/install/linux-postinstall
 
-== Docker run
+
+=== Docker run
 
 * Dockerのイメージからコンテナ立ち上げ、起動までを行うコマンド
 * `sudo docker run hello-world`:Dockerを動かす最終確認コマンド
+
 
 == コンテナ
 
 * PCやサーバ上で隔離され干渉されない環境 +
 ※ コンテナの中に小さなPCが入っているイメージ。
+
 
 === コンテナのメリット
 
