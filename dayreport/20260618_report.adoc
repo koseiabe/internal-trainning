@@ -5,23 +5,6 @@
 
 = Docker
 
-== COPY
-
-* Dockerイメージをbuildする際に、ホストマシンにあるファイルやディレクトリをDockerイメージ内の指定したパスにコピーできる
-* 既存で存在しないディレクトリの直下にCOPY指定する場合、コンテナを作成する際に自動的にディレクトリは作られる +
-
-.Dockerfile
-[source]
-----
-FROM ubuntu:20.04
-
-RUN apt update
-RUN apt install -y curl
-
-# ファイルコピー
-COPY ./hello.txt /app/
-----
-
 == ビルドコンテキスト
 
 * Dockerイメージを作るときのファイルやディレクトリの範囲 +
@@ -36,7 +19,69 @@ docker image build -f <dockerfileのパス> <ビルドコンテキスト>
 docker image build -f docker/dockerfile .
 ----
 
-== .dockerignore
+
+== カスタムイメージ
+
+=== COPY
+
+* Dockerイメージをbuildする際に、ホストマシンにあるファイルやディレクトリをDockerイメージ内の指定したパスにコピーできる
+* 既存で存在しないディレクトリの直下にCOPY指定する場合、コンテナを作成する際に自動的にディレクトリは作られる +
+
+.COPY記述例
+[source,DCL]
+----
+FROM ubuntu:20.04
+
+RUN apt update
+RUN apt install -y curl
+
+# ファイルコピー
+COPY ./hello.txt /app/
+----
+
+=== CMD(Dockerfile内)
+
+* コンテナ実行時のデフォルトコマンドを設定する
+* dockerdfile内で記述 +
+※ dockerfileで１度しか使えない。複数のCMDが存在した場合、最後に記述されたCMDのみ有効となる。
+
+* パラメータはいくつでも記述できる
+
+CMD記述例
+[source,DCL]
+----
+FROM ubuntu:20.04
+
+CMD ["echo","Hello, Docker!"]
+----
+
+=== ★ WORKDIR
+
+* RUNやCMDなどの作業ディレクトリを指定する +
+※ 未指定の場合、"/"が作業ディレクトリになっている。
+
+* コンテナにbashでアクセスした際のカレントディレクトリでもある
+
+.WORKDIR記述例
+[source, DCL]
+----
+FROM ubuntu:20.04
+
+# 1.txt
+# /app/mk_dir/2.txt
+# /app/3.txt
+
+RUN touch 1.txt
+WORKDIR /app/my_dir
+RUN touch 2.txt
+WORKDIR ..
+RUN touch 3.txt
+
+CMD ["bash"]
+----
+
+
+=== ★ .dockerignoreファイル
 
 * .dockerignoreに指定したファイルやディレクトリをビルドコンテキストから除外できる +
 ※ ビルドコンテキスト内に.dockerignoreファイルを作成する
@@ -51,25 +96,7 @@ truncate -s 500m <ファイル名>
 ----
 
 
-== CMD
-
-* コンテナ実行時のデフォルトコマンドを設定する
-* dockerdfile内で記述 +
-※ dockerfileで１度しか使えない。複数のCMDが存在した場合、最後に記述されたCMDのみ有効となる
-
-* パラメータはいくつでも記述できる
-
-[source]
-----
-# CMDコマンド()
-CMD ["実行ファイル(コマンド)","パラメータ"]
-
-# 実行例
-CMD ["ls","-la"]
-CMD ["echo","Hello, Docker!"]
-----
-
-== イメージレイヤー(階層)
+=== イメージレイヤー(階層)
 
 * イメージの変更差分がレイヤーとして保存される
 * レイヤーが変更差分として保存されるおかげで、以前に実行されたbuildがキャッシュされ、実行時間の短縮につながっている
@@ -83,14 +110,15 @@ docker image history <イメージ名>
 docker image build --no-cache <ビルドコンテキストパス>
 ----
 
-== イメージ容量縮小
+=== イメージ容量(縮小)
 
 * イメージレイヤーの層が減ることで容量が小さくなる +
 ※ イメージ容量が小さくなっても、イメージ作成にかかる時間が短くなるとは限らない
 
 * レイヤー構造が少ない＝イメージ容量が小さい
 
-dockerfile記述別(イメージ容量)
+.レイヤー階層別記述例
+[source, DCL]
 ----
 # イメージレイヤー(多)
 FROM ubuntu:20.04
@@ -106,6 +134,49 @@ FROM ubuntu:20.04
 RUN apt update && apt install -y curl vim
 CMD ["bash"]
 ----
+
+== ★ 変数定義(Dockerfile内)
+
+ENV:: イメージ作成とコンテナの両方で有効な変数、一度に複数個定義することが可能
+
+ARG:: イメージ作成時のみ有効な変数、コンテナ実行時に影響しない +
+※ build時限定の使い捨て変数
+
+.変数定義の利点
+[source, DCL]
+----
+# ❌ 悪い例（バージョンが変わるたびに3箇所書き換える必要がある）
+RUN wget https://example.com/software-1.2.3.tar.gz
+RUN tar -xvf software-1.2.3.tar.gz
+WORKDIR /opt/software-1.2.3
+
+# ⭕ 良い例（1行目を書き換えるだけで全てに反映される）
+ARG APP_VERSION=1.2.3
+RUN wget https://example.com/software-${APP_VERSION}.tar.gz
+RUN tar -xvf software-${APP_VERSION}.tar.gz
+WORKDIR /opt/software-${APP_VERSION}
+----
+
+.ENV,ARG 記述例
+[source, DCL]
+----
+FROM ubuntu:20.04
+
+ARG message_arg="Message Arg"
+ENV message_env="Message Env"
+
+RUN echo "$message_arg" > message_arg.txt
+RUN echo "$message_env" > message_env.txt
+
+CMD ["bash"]
+----
+
+----
+# build時に値格納
+docker image build --build-arg <変数名>="<値>" .
+----
+
+
 
 
 == その他
