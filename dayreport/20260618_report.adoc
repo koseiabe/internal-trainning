@@ -177,6 +177,76 @@ docker image build --build-arg <変数名>="<値>" .
 ----
 
 
+== マルチステージビルド
+
+* マルチステージでイメージ作成することでイメージサイズを軽量にできる
+
+* マルチステージビルドを使うときは、コンパイルや翻訳に必要な言語・フレームワークを利用してイメージを作成するとき
+
+* Dockerfileを開発・本番といった環境ごとで分けられる +
+※ １つのDockerfileで管理可能
+
+=== マルチステージビルドでイメージサイズ軽量
+
+* 以下の記述例では、最終的なベースイメージがgccかubuntuかで大きく異なった
+
+.シングルとマルチステージビルドの違い記述例
+[source, DCL]
+----
+# シングル
+# gccをベースイメージで作成
+FROM gcc:12.2.0 AS compiler
+WORKDIR /app
+COPY ./hello.c .
+RUN gcc hello.c
+CMD ["./a.out"]
+----
+
+----
+# マルチ
+# ubuntuをベースイメージで作成
+# "AS <ステージ名>"でステージに名前を付けることができる。※ デフォルトでは一番上から"0"の順番がつけられている。
+FROM gcc:12.2.0 AS compiler
+WORKDIR /app
+COPY ./hello.c .
+RUN gcc hello.c
+
+
+FROM ubuntu:20.04
+WORKDIR /app
+# "--FROM="でcopy元となるステージを指定している
+COPY --from=compiler /app/a.out .
+CMD ["./a.out"]
+----
+
+=== 環境別イメージ作成
+
+* 共通部分は共有でき、環境依存処理部分で分離して、各々の環境Dockerイメージを作成できる
+* EROMでステージ名を指定することで、共通部分を取得して実行できる
+* ステージ名は基本「小文字」のみで書く
+
+.環境別Dockerfile記述例
+[source, DCL]
+----
+FROM ubuntu:20.04 AS base
+RUN apt update 
+CMD ["sh", "-c", "echo My name is ${my_name}"]
+
+
+# FROMでステージを参照して環境ごとにDockerイメージを変える
+FROM base AS development
+ENV my_name=TEST
+
+FROM base AS production
+ENV my_name=Bob
+----
+
+----
+# 環境別にDockerイメージを作成する際
+docker image build --taerget <ステージ名> <ビルドコンテキスト>
+docker image build --target development .
+----
+
 
 
 == その他
