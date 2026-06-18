@@ -136,3 +136,12 @@ WSL:: Windos Subsystem of Linux
 * `lsb_release -a`:ディストリビューションのバージョン確認(ubuntuターミナルから)
 * `wsl.exe --list --online`:WSLでインストール可能なディストリビューション一覧を表示
 * `wsl.exe --install -d [Distro]`:Distroに好みのディストリビューションを入れて実行するとWSLがインストールできる
+* MCPサーバー:claude codeなどのAIが自らアクションできるようにするサーバー
+* docker login:docker hubなどのレジストリに自分のアカウントでログインするコマンド
+* ラズベリーパイ:手のひらサイズの超小型激安パソコン。
+
+== 20260618
+* docker セクション６.29から再開
+
+=== 振り返り
+

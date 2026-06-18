@@ -1,0 +1,115 @@
+:toc: left
+:toc-title: [目次]
+:toclevels: 3
+:sectnums:
+
+= Docker
+
+== COPY
+
+* Dockerイメージをbuildする際に、ホストマシンにあるファイルやディレクトリをDockerイメージ内の指定したパスにコピーできる
+* 既存で存在しないディレクトリの直下にCOPY指定する場合、コンテナを作成する際に自動的にディレクトリは作られる +
+
+.Dockerfile
+[source]
+----
+FROM ubuntu:20.04
+
+RUN apt update
+RUN apt install -y curl
+
+# ファイルコピー
+COPY ./hello.txt /app/
+----
+
+== ビルドコンテキスト
+
+* Dockerイメージを作るときのファイルやディレクトリの範囲 +
+※ ただし、ビルドコンテキスト内にdockerfileが存在してもイメージがうまく作れない場合もある。そこで、dockerfileは"-f"で指定する。
+
+[source]
+----
+# (-f)でdockerfileのパス指定
+docker image build -f <dockerfileのパス> <ビルドコンテキスト>
+
+# 実行例(docker-lecture/docker/dockerfile)
+docker image build -f docker/dockerfile .
+----
+
+== .dockerignore
+
+* .dockerignoreに指定したファイルやディレクトリをビルドコンテキストから除外できる +
+※ ビルドコンテキスト内に.dockerignoreファイルを作成する
+
+* build imageに含ませたくないものを入れる
+* .dockerignoreには容量の大きいファイルや機密情報を含んだ公開したくないファイルを記述することが多い
+
+[source]
+----
+# 指定のファイルサイズのファイルを作成
+truncate -s 500m <ファイル名>
+----
+
+
+== CMD
+
+* コンテナ実行時のデフォルトコマンドを設定する
+* dockerdfile内で記述 +
+※ dockerfileで１度しか使えない。複数のCMDが存在した場合、最後に記述されたCMDのみ有効となる
+
+* パラメータはいくつでも記述できる
+
+[source]
+----
+# CMDコマンド()
+CMD ["実行ファイル(コマンド)","パラメータ"]
+
+# 実行例
+CMD ["ls","-la"]
+CMD ["echo","Hello, Docker!"]
+----
+
+== イメージレイヤー(階層)
+
+* イメージの変更差分がレイヤーとして保存される
+* レイヤーが変更差分として保存されるおかげで、以前に実行されたbuildがキャッシュされ、実行時間の短縮につながっている
+* イメージ作成後にdockerfileに追加する可能性がある場合にはあえてレイヤー構造を細かくすることで、追加していくときにbuild時間を短縮することができる
+
+----
+# イメージレイヤーの確認
+docker image history <イメージ名>
+
+# キャッシュなしでbuild
+docker image build --no-cache <ビルドコンテキストパス>
+----
+
+== イメージ容量縮小
+
+* イメージレイヤーの層が減ることで容量が小さくなる +
+※ イメージ容量が小さくなっても、イメージ作成にかかる時間が短くなるとは限らない
+
+* レイヤー構造が少ない＝イメージ容量が小さい
+
+dockerfile記述別(イメージ容量)
+----
+# イメージレイヤー(多)
+FROM ubuntu:20.04
+
+RUN apt update
+RUN apt install -y curl
+RUN apt install -y vim 
+CMD ["bash"]
+
+# イメージレイヤー(小)
+FROM ubuntu:20.04
+
+RUN apt update && apt install -y curl vim
+CMD ["bash"]
+----
+
+
+== その他
+
+Docker Engine:: Dockerを動かすためのシステム全体像(パッケージ)。dockerCLI,API,Demonを含んだ総称。
+Docker Demon:: Docker Engineの中に存在する１つのプログラム。コンテナの生成、実行、停止、イメージのダウンロードなどを担っている。
+REST API:: システム同士がインターネットを通じてデータをやりとりする際のお約束
