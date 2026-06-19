@@ -21,3 +21,5 @@
 
 == Docker
 * link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260617_report.adoc[Dockerとは、コンテナとは、Dockerイメージ取得・削除、コンテナの起動・削除等]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260618_report.adoc[カスタムイメージ作成、コンテキスト、ボリューム]
+* link:https://github.com/shishibaken/internal-trainning/blob/main/dayreport/20260619_report.adoc[ホストコンテナ接続、バインドマウント、Dockerネットワーク、DockerCompose]
