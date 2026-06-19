@@ -77,7 +77,11 @@ docker network create <任意ネットワーク名>
 
 # 指定したネットワークにコンテナを追加
 docker container run --network <ネットワーク名> <イメージ名>
+
+# Dockerネットワークの削除　※ネットワークにコンテナがある状態では削除できない
+docker network rm <ネットワーク名>
 ----
+
 
 brigeネットワーク:: デフォルトDockerネットワーク
 * コンテナを作成する際、Dockerネットワークを指定しない場合は「brige」に位置づけられる
@@ -107,5 +111,81 @@ root@915f8e553142:/#
 ----
 
 
+== Docker Composeとは
+
+* Docker-compose.yamlファイルにコンテナの設定や管理などを記述することで、１つのコマンドの簡易的に実行することができる
+* Docker-compose.yamlはdockerコマンドの集合体 
+
+
+.APIコンテナ作成～動作確認手順
+----
+# イメージ作成
+docker image build -t api:latest .
+
+# コンテナ作成(ポート同期)
+docker container run --rm -p 8080:8080 api:latest 
+
+# bashでコンテナ内のファイル確認
+docker container exec -it 71159546591b bash
+root@71159546591b:/api# cat src/main/java/com/example/api/HelloController.java
+package com.example.api;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api")
+public class HelloController {
+    @RequestMapping("/hello")
+    public String hello(
+            @RequestParam String lang
+    ) {
+        return "HELLO";
+    }
+
+# ブラウザでAPIコンテナにアクセス
+\http://localhost:8080/api/hello?lang=ja
+HELLO
+----
+
+=== docker-composeの実行
+
+* dockercomposeはDockerネットワークを自動生成し、生成されたネットワークにコンテナを追加する
+
+.Docker-compose.yaml記述例
+[source, yaml]
+----
+version: 
+services:
+  api: 
+    build: ./api
+    ports: 
+      - 8080:8080
+----
+* `build:` ：<docker image build >の実行。ビルドコンテキストを指定
+* `ports:` ：<docker container run>の実行。ホストとコンテナをポート同期している
+
+.docker composeコマンド一覧
+[source]
+----
+# Docker-compose.yamlファイルの実行
+docker compose up
+
+# 一部のコンテナのみ実行(デタッチドモード)
+docker compose up <コンテナ名> -d
+
+# 任意コマンドでコンテナ実行
+docker compose exec <コンテナ名> bash
+
+# データを一度完全リセット
+docker compose down --volumes
+----
+
 
 == その他
+* ubuntu環境とVScodeの連携:dockerのディレクトリに移動して `code .` コマンドを打つとubuntuからVScodeが展開される
+
+* VScodeでのファイル保存:: curl+s
+

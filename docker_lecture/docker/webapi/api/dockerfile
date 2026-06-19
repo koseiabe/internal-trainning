@@ -1,0 +1,6 @@
+FROM gradle:7-jdk17
+
+WORKDIR /api
+COPY . .
+# springbootの実行コマンド
+CMD [ "./gradlew", "bootRun" ]

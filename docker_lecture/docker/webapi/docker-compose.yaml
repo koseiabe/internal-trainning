@@ -1,0 +1,25 @@
+# apiコンテナとdbコンテナの作成
+services:
+  api: 
+    build: ./api
+    ports: 
+      - 8080:8080
+  db: 
+    image: postgres:15
+    ports:
+      - 5432:5432
+    # ENV:環境変数定義
+    environment:
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_USER: postgres
+      POSTGRES_DB: appdb
+    # ホストとコンテナ同期
+    volumes:
+      # ボリュームとコンテナ同期
+      - db-storage:/var/lib/postgresql/data
+      # バインドマウント
+      - ./db/initdb:/docker-entrypoint-initdb.d
+
+# ボリューム領域作成
+volumes: 
+  db-storage:
