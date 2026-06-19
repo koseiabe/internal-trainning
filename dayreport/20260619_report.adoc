@@ -180,9 +180,12 @@ docker compose up <コンテナ名> -d
 docker compose exec <コンテナ名> bash
 
 # データを一度完全リセット
+docker compose down
+# ボリュームも一緒にリセット
 docker compose down --volumes
 ----
 
+* .sqlファイルのコメント記述は"#"ではなく"--"で記述する
 
 == その他
 * ubuntu環境とVScodeの連携:dockerのディレクトリに移動して `code .` コマンドを打つとubuntuからVScodeが展開される
