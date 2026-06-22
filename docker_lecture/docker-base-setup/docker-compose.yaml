@@ -5,17 +5,23 @@ services:
     build: ./api
     ports: 
       - 8080:8080
+    tty: true
     # compose内では相対パスでも良い。:cachedはオプションでより早く処理されるがデータの一貫性は少し低くなる
     volumes:
     - ./api:/workspace:cached
 
   web:
-    container_name: web
-    build: ./web
+    container_name: we
+    build: 
+      context: ./web
+      target: base
     ports:
       - 3000:3000
+    environment:
+      - REACT_APP_API_SERVER=http://localhost:8080/api
+    tty: true
     volumes: 
-      - ./web:workspace:cached
+      - ./web:/workspace:cached
     depends_on:
       - api
       

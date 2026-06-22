@@ -1,0 +1,33 @@
+name: Deploy Simple CI/CD
+
+on: 
+  push:
+    branches: ["main"]
+
+env:
+
+permissions:
+  contents: read
+
+jobs:
+# Web container build/test
+## Get Source
+## build/test
+## docker image build
+## login github container registry
+## Push image to github container registry
+
+
+# Api container build/test
+## Get Source
+## build/test
+## docker image build
+## login github container registry
+## Push image to github container registry
+
+
+# Deploy
+## Get Source
+## login github container registry
+## edit task definition
+## deploy

@@ -28,10 +28,79 @@ docker compose up --build
  CD(デプロイ)AWS,githubイメージレジストリ +
 |===
 
+[source]
+----
+# コンテナ一覧表示(ls同様)
+Docker compose ps
+----
 
+.DockerCompose.yaml記述
+[source, yaml]
+----
+services:
+  api: 
+    # コンテナ名を任意に設定
+    container_name: api
+    build: ./api
+    ports: 
+      - 8080:8080
+    tty: true
+    # compose内では相対パスでも良い。:cachedはオプションでより早く処理されるがデータの一貫性は少し低くなる
+    volumes:
+    - ./api:/workspace:cached
 
+  web:
+    container_name: web
+    build: ./web
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_API_SERVER=http://localhost:8080/api
+    tty: true
+    volumes: 
+      - ./web:/workspace:cached
+    depends_on:
+      - api
+----
 
+=== VScodeからコンテナ接続
 
+* compose.yaml内に、APIとWEBコンテナの記述しVScodeからどちらかに接続した時点で片方のコンテナも立ち上がっている
+
+リバースプロキシ:: インターネットとWebサーバーの間に入り、クライアントの代わりにWebサーバーへアクセスを受け渡す「中継サーバー」
+
+.dockercomposeファイルでのマルチステージ記述例
+[source, yaml]
+----
+ web:
+    container_name: web
+    build: 
+      context: ./web
+      target: base
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_API_SERVER=http://localhost:8080/api
+    tty: true
+    volumes: 
+      - ./web:/workspace:cached
+    depends_on:
+      - api
+----
+
+== github Actions
+
+* GitHubが提供しているCI/CDの自動化プラットフォーム +
+gitpushなどのアクションが起きた際に、あらかじめ決めていた処理が自動的に実行される
+
+[source]
+----
+💻 開発環境 (WSL等)          ☁️ GitHub Actions          📦 GitHubレジストリ          🚀 本番サーバー
+┌───────────────────┐        ┌─────────────────┐        ┌──────────────────┐        ┌─────────────────┐
+│ コードを書く       │ ───►   │ Dockerイメージ  │ ───►   │  ghcr.io         │ ───►   │ docker pull     │
+│ Dockerfileを作る  │ (push) │ を自動ビルドする │ (push) │ (イメージを保管)  │ (pull) │ してコンテナ起動 │
+└───────────────────┘        └─────────────────┘        └──────────────────┘        └─────────────────┘
+----
 
 
 == その他
@@ -49,4 +118,7 @@ APIとWEBサーバーの違い:: webはwebページを表示するためのフ�
 Node.js:: 本来ブラウザの名kでしか動かなかったjavascriptを、PCやサーバー上でも動かせるようにした実行環境
 
 init:: システムやプログラムが動き出す最初の一歩として実行される処理・コマンド(初期化、起動処理)
+
+npm:: Node.jsで使われるパッケージ管理ツール
+
 
