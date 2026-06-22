@@ -1,0 +1,21 @@
+services:
+  api: 
+    # コンテナ名を任意に設定
+    container_name: api
+    build: ./api
+    ports: 
+      - 8080:8080
+    # compose内では相対パスでも良い。:cachedはオプションでより早く処理されるがデータの一貫性は少し低くなる
+    volumes:
+    - ./api:/workspace:cached
+
+  web:
+    container_name: web
+    build: ./web
+    ports:
+      - 3000:3000
+    volumes: 
+      - ./web:workspace:cached
+    depends_on:
+      - api
+      
