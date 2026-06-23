@@ -7,6 +7,81 @@
 
 deprecated:: 非推奨
 
+* .githubディレクトリ(指示書)は、必ず「リポジトリの一番上の階層」に置かなければならない
+
+.Github Actions実行のパス
+[source]
+----
+internal-trainning (リポジトリのルート)
+├── .github/
+│   └── workflows/
+│       └── test.yml       ← 指示書（中身は先ほどの working-directory 付きのもの）
+└── github_actions/
+    ├── math.js            ← プログラム本体
+    ├── math.test.js       ← テストコード
+    ├── package.json       ← 設定ファイル
+    └── package-lock.json
+----
+
+.Github Actionsの裏側の挙動
+[source]
+----
+[GitHubの仮想パソコンの中での動き]
+
+🛸 仮想パソコン（Ubuntu）が起動
+  ↓
+📥 Step 1: Checkout code
+   リポジトリからあなたのコード（github_actions/ フォルダなど）をダウンロード
+  ↓
+🟢 Step 2: Setup Node.js
+   Node.js（バージョン20）をインストールして、実行環境を整える
+  ↓
+📁 (ここが重要！) working-directory の命令発動
+   ロボットが「github_actions」フォルダの中へガサゴソと移動する
+  ↓
+🏃 Step 3: Install dependencies and Run test
+   1. `npm ci` で必要な部品（Jestなど）をインストール
+   2. `npm test` を実行！「1 + 2 が 3 になること」に合格！
+  ↓
+🎉 すべて成功したため、画面に緑のチェック（✅）をつけて終了！
+----
+
+.\./github/workflows/test.yml記述
+[source, yaml]
+----
+name: Node.js Test Automation
+
+# どういうイベントが起きたら実行されるか明示
+on:
+  push:
+    branches: [ "main", "master" ]
+
+# ジョブの中身と実行環境指定
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+# 作業ディレクトリの指定
+    defaults:
+      run:
+        working-directory: github_actions
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies and Run test
+      run: |
+        npm ci
+        npm test
+----
+
+
 
 == その他
 
