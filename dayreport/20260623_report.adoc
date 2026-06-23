@@ -83,6 +83,8 @@ jobs:
 
 == Github Packages
 
+GitHub Packages:: 自分が作ったプログラムの部品（ライブラリやパッケージ、Dockerイメージなど）を、GitHub上で安全に保管・共有・管理できる場所（レジストリサービス）
+
 [source]
 ----
 # コンテナをイメージとして保存
