@@ -1,0 +1,110 @@
+:toc: left
+:toc-title: [目次]
+:toclevels: 3
+:sectnums:
+
+= Kubernetes(クーバネティス)
+
+Kubernetes:: 大量のコンテナを自動で管理や運用するためのシステム
+
+* Kubernetesは常に理想状態を維持しようと稼働する
+
+== Kubernetesの特徴
+* 自動復旧 +
+コンテナが突然故障しても自動検知し、自動で新コンテナの立ち上げから復旧までを行う
+
+* 自動スケーリング +
+アクセス状況に応じて、コンテナを自動的に増減させ負荷分散を行う。
+
+* ダウンタイムなしアップデート +
+すべてのコンテナを一度に止めて更新するのではなく、１つずつ順番に中身を入れ替えて行う。
+
+* IP自動割り当てとロードバランシング +
+コンテナごとに固有のIPアドレスを割り振り、それらをまとめる「窓口」を自動で作る。
+
+== Kubernetes用語
+
+Pod:: Kubernetesが管理する最小単位、この中に１つまたは複数のコンテナが入っている
+
+Node:: コンテナを実際に動かしているサーバーマシン
+
+Cluster:: 複数のNodeをひとまとめにしたKubernetesシステムの全体環境のこと
+
+Manifest:: 指示を書き込む設定ファイル=指示書(yamlファイル)
+
+== コンテナ・オーケストレーション機能
+
+* デプロイメント、スケジューリング、オートスケーリング、ネットワーク、リソースマネジメント、セキュリティ、これらの操作を今まではマニュアル（手作業）によって行っていたがすべてシステムとして実行してくれる
+
+== Kubernetes Architecture
+
+Worker node:: コンテナが実行されるマシン
+
+Control Plane:: Worker nodeの状態管理を行うマスターマシン
+
+kubelet:: WorkerとControlPlaneをつなぐエージェント（Worker内に存在する）
+
+k-proxy:: Workerのルールを管理している
+
+== kubectlコマンド
+
+kubectl設定ファイル:: $HOME/.kube/config
+
+kubecrlの構文:: kubectl <command> <TYPE> <NAME> <flags>
+
+.kubectlのインストール
+[source]
+----
+#バイナリファイダウンロード
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+#実行権限付与
+chmod +x ./kubectl
+
+#パス移動
+sudo mv ./kubectl /usr/local/bin/kubectl
+sudo chown root: /usr/local/bin/kubectl
+
+#version確認
+kubectl version --client
+----
+
+.kubectlコマンド一覧
+----
+#コンテキスト一覧
+kubectl config get-contexts
+
+#カレントコンテキスト表示
+kubectl config current-context
+
+#リソース一覧表示
+kubecrl api-resoueces
+
+#リソースの詳細表示
+kubectl describe node <node名>
+
+#node一覧とステータス表示
+kubectl get node 
+# "-o" 出力形式の指定
+kubectl get node -o wide
+kubecrl get node -o yaml
+
+#Namespaceの一覧表示
+kubectl get namespace
+# "-n" Namespaceの指定
+kubectl get pod -n <Namespace名>
+
+#Podの一覧表示
+kubectl get pod --all-namespaces
+
+----
+
+Namespace:: Clusterを論理的に区切った部屋みたいなもの 
+
+Pod:: コンテナ
+
+= その他
+
+コンポーネント:: 特定の機能を持った交換可能なプログラムの部品
+
+
