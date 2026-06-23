@@ -1,0 +1,27 @@
+name: Node.js Test Automation
+
+# mainブランチにプッシュされたら起動
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest # 仮想のLinux環境を用意
+
+    steps:
+    # GitHubからコードをコピーしてくる
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Node.jsをセットアップ
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    # ライブラリを入れてテストを実行！
+    - name: Install dependencies and Run test
+      run: |
+        npm ci
+        npm test
