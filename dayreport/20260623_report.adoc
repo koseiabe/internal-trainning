@@ -81,6 +81,19 @@ jobs:
         npm test
 ----
 
+== Github Packages
+
+[source]
+----
+# コンテナをイメージとして保存
+docker commit <コンテナID> my-app-image:latest
+
+# 手元のイメージ名をgithub用のイメージ名に変更
+docker tag <イメージ名> ghcr.io/shishibaken/<新しい名前>:latest
+
+# github packgesにプッシュ
+docker push ghcr.io/shishibaken/<新しい名前>:latest
+----
 
 
 == その他
