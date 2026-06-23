@@ -1,0 +1,12 @@
+:toc: left
+:toc-title: [目次]
+:toclevels: 3
+:sectnums:
+
+== Github Actions
+
+deprecated:: 非推奨
+
+
+== その他
+
